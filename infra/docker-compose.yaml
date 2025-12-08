@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "3306:3306"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - db-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80" # Access via localhost:5050
+    depends_on:
+      - postgres
+    networks:
+      - db-network
+
+volumes:
+  postgres_data:
+
+networks:
+  db-network:
+    driver: bridge
