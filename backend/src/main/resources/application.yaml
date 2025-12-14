@@ -3,9 +3,9 @@ spring:
     name: VitaCheck
   
   datasource:
-    url: jdbc:postgresql://localhost:5432/${DB_NAME:vitadb}
-    username: ${DB_USER:vita}
-    password: ${DB_PASSWORD:vita.080120040}
+    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   
   jpa:
@@ -19,6 +19,5 @@ spring:
 application:
   security:
     jwt:
-      # This is a random 256-bit key (base64 encoded)
-      secret-key: ${JWT_SECRET_KWY}
+      secret-key: ${JWT_SECRET_KEY}
       expiration: 86400000 # 24 hours in milliseconds
