@@ -5,6 +5,7 @@ import com.vita.vitacheck.dto.LoginRequest;
 import com.vita.vitacheck.model.User;
 import com.vita.vitacheck.repository.UserRepository;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
     
+    private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     
@@ -48,7 +50,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User login(LoginRequest request) {
+    public String login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
         
@@ -56,6 +58,6 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
         
-        return user;
+        return jwtService.generateToken(user);
     }
 }

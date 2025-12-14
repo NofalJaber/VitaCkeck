@@ -1,5 +1,8 @@
 package com.vita.vitacheck.dto;
 
+import com.vita.vitacheck.validation.ValidCNP;
+import com.vita.vitacheck.validation.ValidPhoneNumber;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -18,6 +21,7 @@ public class RegisterRequest {
     private String confirmPassword;
 
     @NotBlank
+    @ValidCNP
     private String cnp;
 
     @NotBlank
@@ -27,6 +31,7 @@ public class RegisterRequest {
     private String lastName;
 
     @NotBlank
+    @ValidPhoneNumber
     private String phoneNumber;
 
     private boolean isMale;

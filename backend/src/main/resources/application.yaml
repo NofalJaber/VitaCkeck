@@ -15,3 +15,10 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+
+application:
+  security:
+    jwt:
+      # This is a random 256-bit key (base64 encoded)
+      secret-key: bF8siIcg9LK7kFLbe9lW2W3sDxEhLi3eVznrpT4zfvY=
+      expiration: 86400000 # 24 hours in milliseconds
