@@ -20,5 +20,5 @@ application:
   security:
     jwt:
       # This is a random 256-bit key (base64 encoded)
-      secret-key: bF8siIcg9LK7kFLbe9lW2W3sDxEhLi3eVznrpT4zfvY=
+      secret-key: ${JWT_SECRET_KWY}
       expiration: 86400000 # 24 hours in milliseconds
