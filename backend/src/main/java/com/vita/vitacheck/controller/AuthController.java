@@ -9,6 +9,9 @@ import com.vita.vitacheck.dto.RegisterRequest;
 import com.vita.vitacheck.dto.LoginRequest;
 import com.vita.vitacheck.service.AuthService;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -29,13 +32,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest request) {
         try{
-            authService.login(request);
-            return ResponseEntity.ok("User logged in successfully");
+            String token = authService.login(request);
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
         }
         catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
         }
     }
 }
