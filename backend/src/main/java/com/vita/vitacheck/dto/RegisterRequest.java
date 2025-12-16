@@ -18,9 +18,6 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank
-    private String confirmPassword;
-
-    @NotBlank
     @ValidCNP
     private String cnp;
 

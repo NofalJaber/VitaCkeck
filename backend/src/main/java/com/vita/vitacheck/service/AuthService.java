@@ -31,9 +31,7 @@ public class AuthService {
             throw new RuntimeException("An account with this phone number already exists");
         }
 
-        if(!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new RuntimeException("Passwords do not match");
-        }
+        System.out.println("Registering user: " + request.toString());
 
         User user = User.builder()
                 .email(request.getEmail())
