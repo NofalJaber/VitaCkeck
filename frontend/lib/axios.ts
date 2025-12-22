@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const api = axios.create({
+const authApi = axios.create({
   baseURL: 'http://localhost:8080/api/auth', // Your backend URL
   headers: {
     'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ const api = axios.create({
 
 // Optional: Add an interceptor to attach the token to every request automatically
 // (We will use this later for protected routes)
-api.interceptors.request.use((config) => {
+authApi.interceptors.request.use((config) => {
   const token = Cookies.get('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -18,4 +18,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export default api;
+// Users API
+const usersApi = axios.create({
+  baseURL: 'http://localhost:8080/api/users', // Your backend URL
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+usersApi.interceptors.request.use((config) => {
+  const token = Cookies.get('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export { authApi, usersApi };

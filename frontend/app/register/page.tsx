@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/lib/axios';
+import { authApi } from '@/lib/axios';
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -35,7 +35,7 @@ export default function RegisterPage() {
             }
             console.log("Passwords match");
             // 1. Send credentials to backend
-            const response = await api.post('/register', { email, password, cnp, firstName, lastName, phoneNumber, isMale: isMale, address, age });
+            const response = await authApi.post('/register', { email, password, cnp, firstName, lastName, phoneNumber, male: isMale, address, age });
 
             // 2. Get message from response
             const { message } = response.data;
