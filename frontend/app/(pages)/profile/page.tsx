@@ -61,7 +61,7 @@ export default function profile() {
       <div className="mx-auto max-w-4xl">
         {user && (
           <div className="rounded-lg bg-white p-6 shadow-md">
-            <h2 className="mb-4 text-xl font-bold text-blue-600 border-b-1 border-black pb-2">User Profile</h2>
+            <h2 className="mb-4 text-xl font-bold text-[#4896bb] border-b-1 border-black pb-2">User Profile</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

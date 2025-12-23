@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/axios';
+import Image from 'next/image';
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -62,8 +63,14 @@ export default function RegisterPage() {
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
 
                 {/* Logo or Title */}
-                <div className="mb-6 text-center">
-                    <h1 className="text-3xl font-bold text-blue-600">VitaCheck</h1>
+                <div className="mb-6 text-center flex flex-col items-center justify-center">
+                    <Image
+                        src="/logo.svg"
+                        alt="VitaCheck Logo"
+                        width={300} // Adjust width as needed
+                        height={40} // Adjust height as needed
+                        priority // Optional: loads the logo immediately since it's above the fold
+                    />
                     <p className="text-gray-500">Register account</p>
                 </div>
 
@@ -84,7 +91,7 @@ export default function RegisterPage() {
                                 required
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
-                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                             />
                         </div>
                         <div>
@@ -94,7 +101,7 @@ export default function RegisterPage() {
                                 required
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
-                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                             />
                         </div>
                     </div>
@@ -106,7 +113,7 @@ export default function RegisterPage() {
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                             placeholder="you@example.com"
                         />
                     </div>
@@ -118,7 +125,7 @@ export default function RegisterPage() {
                             required
                             value={cnp}
                             onChange={(e) => setCnp(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                         />
                     </div>
 
@@ -129,7 +136,7 @@ export default function RegisterPage() {
                             required
                             value={phoneNumber}
                             onChange={(e) => setPhoneNumber(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                         />
                     </div>
 
@@ -139,7 +146,7 @@ export default function RegisterPage() {
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                         />
                     </div>
 
@@ -150,7 +157,7 @@ export default function RegisterPage() {
                                 type="number"
                                 value={age}
                                 onChange={(e) => setAge(e.target.value)}
-                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                             />
                         </div>
                         <div>
@@ -163,7 +170,7 @@ export default function RegisterPage() {
                                     if (e.target.value === 'female') setIsMale(false);
                                 }}
                                 required
-                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                                className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                             >
                                 <option value="" disabled>Select Gender</option>
                                 <option value="male">Male</option>
@@ -179,7 +186,7 @@ export default function RegisterPage() {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                         />
                     </div>
 
@@ -190,18 +197,18 @@ export default function RegisterPage() {
                             required
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-blue-500 focus:outline-none"
+                            className="mt-1 block w-full rounded border border-gray-300 p-2 text-black focus:border-[#23436aff] focus:outline-none"
                         />
                     </div>
 
                     <div className="mb-6 text-center">
-                        <p className="text-gray-500">Already have an account? Sign in <a href="/" className="text-blue-600 hover:underline">here</a></p>
+                        <p className="text-gray-500">Already have an account? Sign in <a href="/" className="text-[#23436aff] hover:underline">here</a></p>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-full rounded bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none ${loading ? 'cursor-not-allowed opacity-50' : ''
+                        className={`w-full rounded bg-[#4896bb] px-4 py-2 font-bold text-white hover:bg-[#23436aff] focus:outline-none ${loading ? 'cursor-not-allowed opacity-50' : ''
                             }`}
                     >
                         {loading ? 'Signing in...' : 'Sign Up'}
