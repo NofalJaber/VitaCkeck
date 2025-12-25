@@ -18,15 +18,15 @@ authApi.interceptors.request.use((config) => {
   return config;
 });
 
-// Users API
-const usersApi = axios.create({
-  baseURL: 'http://localhost:8080/api/users', // Your backend URL
+// User API
+const userApi = axios.create({
+  baseURL: 'http://localhost:8080/api/user', // Your backend URL
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-usersApi.interceptors.request.use((config) => {
+userApi.interceptors.request.use((config) => {
   const token = Cookies.get('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -34,4 +34,4 @@ usersApi.interceptors.request.use((config) => {
   return config;
 });
 
-export { authApi, usersApi };
+export { authApi, userApi };
