@@ -27,17 +27,21 @@ export default function Navbar() {
                         <h1 className="ml-2 text-2xl font-bold text-[#23436aff]">Menu</h1>
                     </div>
 
-                    {/* Separator Line (Moved outside the header wrapper) */}
+                    {/* Separator Line */}
                     <div className="my-4 border-b border-gray-200"></div>
 
-                    {/* Placeholder Buttons */}
+                    {/* Menu Links */}
                     <div className="flex flex-col space-y-2">
-                        <button
+                        {/* New Medical Tests Page Link */}
+                        <Link
+                            href="/tests"
                             className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-blue-600"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            Future Page 1
-                        </button>
+                            My Medical Tests
+                        </Link>
+
+                        {/* Placeholder Button */}
                         <button
                             className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-blue-600"
                             onClick={() => setIsMenuOpen(false)}
@@ -77,9 +81,9 @@ export default function Navbar() {
                     <Image
                         src="/logo.svg"
                         alt="VitaCheck Logo"
-                        width={210} // Adjust width as needed
-                        height={40} // Adjust height as needed
-                        priority // Optional: loads the logo immediately since it's above the fold
+                        width={210}
+                        height={40}
+                        priority
                     />
                 </Link>
 

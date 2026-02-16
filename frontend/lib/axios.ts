@@ -34,4 +34,15 @@ userApi.interceptors.request.use((config) => {
   return config;
 });
 
-export { authApi, userApi };
+// User API
+const testsApi = axios.create({
+  baseURL: 'http://localhost:8080/api/tests', // Your backend URL
+});
+
+testsApi.interceptors.request.use((config) => {
+  const token = Cookies.get('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export { authApi, userApi, testsApi };
