@@ -25,3 +25,7 @@ application:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
       expiration: 86400000 # 24 hours in milliseconds
+
+gemini:
+  api:
+    key: ${AI_API_KEY}

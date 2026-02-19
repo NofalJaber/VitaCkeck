@@ -1,8 +1,10 @@
 package com.vita.vitacheck.controller;
 
+import com.vita.vitacheck.dto.MedicalTestItemResponse;
 import com.vita.vitacheck.dto.MedicalTestResponse;
 import com.vita.vitacheck.model.MedicalTest;
 import com.vita.vitacheck.model.User;
+import com.vita.vitacheck.service.MedicalExtractionService;
 import com.vita.vitacheck.service.MedicalTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,8 @@ import java.util.List;
 public class MedicalTestController {
 
     private final MedicalTestService medicalTestService;
+    private final MedicalExtractionService medicalExtractionService;
+
 
     // Upload a new test
     @PostMapping("/upload")
@@ -74,6 +78,37 @@ public class MedicalTestController {
         }
         catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Analyze test
+    @PostMapping("/{id}/analyze")
+    public ResponseEntity<String> analyzeTest(@AuthenticationPrincipal User user, @PathVariable Long id)
+    {
+        try{
+            MedicalTest test = medicalTestService.getTestFile(id, user);
+            byte[] fileBytes = test.getData();
+
+            medicalTestService.analyzeTest(test, fileBytes);
+            return ResponseEntity.ok("Test analyzed successfully");
+        }
+        catch (RuntimeException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/test-data")
+    public ResponseEntity<MedicalTestItemResponse> getAnalyzedData(@AuthenticationPrincipal User user, @PathVariable Long id)
+    {
+        try
+        {
+            MedicalTest test = medicalTestService.getTestFile(id, user);
+            return ResponseEntity.ok(medicalExtractionService.getTestData(test));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

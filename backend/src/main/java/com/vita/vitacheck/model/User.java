@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,6 +44,20 @@ public class User implements UserDetails {
     private boolean isMale;
     private String address;
     private Integer age;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicalTest> medicalTests = new ArrayList<>();
+
+    public void addMedicalTest(MedicalTest test){
+        medicalTests.add(test);
+        test.setUser(this);
+    }
+
+    public void removeMedicalTest(MedicalTest test){
+        medicalTests.remove(test);
+        test.setUser(null);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

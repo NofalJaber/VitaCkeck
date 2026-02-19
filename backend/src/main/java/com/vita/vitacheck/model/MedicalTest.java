@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,4 +33,21 @@ public class MedicalTest {
     // We removed @Lob to avoid needing @Transactional just to read the file
     @Column(columnDefinition = "bytea")
     private byte[] data;
+
+    private String laboratoryName;
+    private String testDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "medicalTest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicalTestItem> testItems = new ArrayList<>();
+
+    public void addTestItem(MedicalTestItem item) {
+        testItems.add(item);
+        item.setMedicalTest(this);
+    }
+
+    public void removeTestItem(MedicalTestItem item) {
+        testItems.remove(item);
+        item.setMedicalTest(null);
+    }
 }
