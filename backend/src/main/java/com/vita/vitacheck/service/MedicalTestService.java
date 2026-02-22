@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,23 +51,20 @@ public class MedicalTestService {
     public void analyzeTest(MedicalTest test, byte[] fileBytes)
     {
         try {
-            System.out.println("Începem procesarea AI pentru fișierul: " + test.getFileName());
+            test.getTestItems().clear();
+            System.out.println("Starting AI processing for the file: " + test.getFileName());
 
-            // Extragem JSON-ul ca text
             String jsonFromGemini = medicalExtractionService.extractDataFromPdf(fileBytes);
 
-            // Parsăm JSON-ul string în obiectul nostru DTO
             MedicalTestItemResponse extractedData = objectMapper.readValue(jsonFromGemini,
                     MedicalTestItemResponse.class);
 
-            System.out.println("Laborator găsit: " + extractedData.getLaboratory());
+            System.out.println("Laboratory found: " + extractedData.getLaboratory());
 
-            // Setăm informațiile generale pe document
             test.setLaboratoryName(extractedData.getLaboratory());
             String dateTime = extractedData.getCollection_date();
             test.setTestDate(dateTime);
 
-            // 3. Parcurgem rezultatele și creăm entitățile copil
             if (extractedData.getRezults() != null) {
                 for (MedicalTestItemResponse.TestItemDto dto : extractedData.getRezults()) {
 
@@ -85,12 +81,12 @@ public class MedicalTestService {
                     test.addTestItem(item);
                 }
             }
-            System.out.println("S-au extras cu succes " + test.getTestItems().size() + " analize.");
+            System.out.println("Successfully extracted " + test.getTestItems().size() + " tests.");
 
             medicalTestRepository.save(test);
 
         } catch (Exception e) {
-            System.err.println("Eroare la extragerea automată a datelor cu AI: " + e.getMessage());
+            System.err.println("Error when extracting data with AI: " + e.getMessage());
         }
     }
 

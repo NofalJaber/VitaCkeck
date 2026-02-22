@@ -29,8 +29,6 @@ public class MedicalTest {
     private String fileType;
     private LocalDateTime uploadDate;
 
-    // Use bytea for PostgreSQL instead of LONGBLOB
-    // We removed @Lob to avoid needing @Transactional just to read the file
     @Column(columnDefinition = "bytea")
     private byte[] data;
 
