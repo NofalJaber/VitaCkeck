@@ -98,6 +98,7 @@ public class MedicalTestController {
         }
     }
 
+    // Get test data
     @GetMapping("/{id}/test-data")
     public ResponseEntity<MedicalTestItemResponse> getAnalyzedData(@AuthenticationPrincipal User user, @PathVariable Long id)
     {

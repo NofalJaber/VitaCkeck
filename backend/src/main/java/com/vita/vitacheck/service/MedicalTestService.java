@@ -1,5 +1,7 @@
 package com.vita.vitacheck.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vita.vitacheck.dto.MedicalTestItemResponse;
 import com.vita.vitacheck.dto.MedicalTestResponse;
@@ -48,13 +50,34 @@ public class MedicalTestService {
     }
 
     @Transactional
-    public void analyzeTest(MedicalTest test, byte[] fileBytes)
-    {
+    public void analyzeTest(MedicalTest test, byte[] fileBytes) {
         try {
             test.getTestItems().clear();
             System.out.println("Starting AI processing for the file: " + test.getFileName());
 
             String jsonFromGemini = medicalExtractionService.extractDataFromPdf(fileBytes);
+            jsonFromGemini = jsonFromGemini.trim();
+
+            if (jsonFromGemini.startsWith("[")) {
+                System.out.println("Warning: AI returned an Array. Trying autocorrect...");
+                JsonNode rootNode = objectMapper.readTree(jsonFromGemini);
+
+                if (rootNode.isArray() && !rootNode.isEmpty()) 
+                {
+                    if (rootNode.get(0).has("rezults")) 
+                    {
+                        jsonFromGemini = rootNode.get(0).toString();
+                    } 
+                    else if (rootNode.get(0).has("test_name")) 
+                    {
+                        ObjectNode fixedRoot = objectMapper.createObjectNode();
+                        fixedRoot.put("laboratory", "Necunoscut");
+                        fixedRoot.putNull("collection_date");
+                        fixedRoot.set("rezults", rootNode);
+                        jsonFromGemini = fixedRoot.toString();
+                    }
+                }
+            }
 
             MedicalTestItemResponse extractedData = objectMapper.readValue(jsonFromGemini,
                     MedicalTestItemResponse.class);
@@ -77,6 +100,7 @@ public class MedicalTestService {
                     item.setMaxReference(dto.getMax_reference());
                     item.setTextReference(dto.getText_reference());
                     item.setFlag(dto.getFlag());
+                    item.setLimits(dto.getLimits());
 
                     test.addTestItem(item);
                 }

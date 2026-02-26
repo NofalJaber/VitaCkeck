@@ -1,5 +1,10 @@
 package com.vita.vitacheck.model;
 
+import java.util.List;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +29,10 @@ public class MedicalTestItem {
     private Double minReference;
     private Double maxReference;
     private String textReference;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private List<MedicalTestItemLimits> limits;
 
     private String flag;
 }

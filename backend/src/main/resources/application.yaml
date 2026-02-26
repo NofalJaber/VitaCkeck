@@ -28,4 +28,4 @@ application:
 
 gemini:
   api:
-    key: ${AI_API_KEY}
+    keys: ${AI_API_KEYS}
