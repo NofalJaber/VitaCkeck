@@ -32,22 +32,22 @@ export default function Navbar() {
 
                     {/* Menu Links */}
                     <div className="flex flex-col space-y-2">
-                        {/* New Medical Tests Page Link */}
                         <Link
                             href="/tests"
-                            className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-blue-600"
+                            className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-[#4896bb]"
                             onClick={() => setIsMenuOpen(false)}
                         >
                             My Medical Tests
                         </Link>
 
-                        {/* Placeholder Button */}
-                        <button
-                            className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-blue-600"
+                        {/* Pagina Nouă pentru Grafice */}
+                        <Link
+                            href="/analytics"
+                            className="rounded-md px-4 py-2 text-left text-gray-700 transition hover:bg-gray-100 hover:text-[#4896bb]"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            Future Page 2
-                        </button>
+                            My Analytics (Graphs)
+                        </Link>
                     </div>
                 </div>
             </div>

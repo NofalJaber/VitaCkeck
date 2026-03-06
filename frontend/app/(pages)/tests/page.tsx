@@ -113,6 +113,14 @@ export default function TestsPage() {
         }
     }
 
+    const formatUploadDate = (isoString: Date) => {
+        const date = new Date(isoString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6">
             <h1 className="text-3xl font-bold mb-8 text-[#23436aff]">My Medical Tests</h1>

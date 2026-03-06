@@ -18,12 +18,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.nio.file.Path;
 
 @Service
 public class MedicalExtractionService {
@@ -57,10 +52,10 @@ public class MedicalExtractionService {
             Structura trebuie să fie exact aceasta:
             {
               "laboratory": "Numele laboratorului (ex: Synevo, Medlife, Angelmed)",
-              "collection_date": "YYYY-MM-DD",
+              "collection_date": "DD-MM-YYYY",
               "rezults": [
                 {
-                  "test_name": "Numele analizei, doar numele principal fara diacritice, prescurtari sau detalii in paranteze () si fara unitati de masura (EX: %)",
+                  "test_name": "Numele analizei, doar numele principal fara diacritice, prescurtari sau detalii in paranteze (). Daca analiza este un procent, adaugam " %" la finalul numelui ("Procentul de limfocite", "Limfocite %" -> "Limfocite %"),
                   "numeric_value": valoarea ca numar (float) sau null daca e text,
                   "string_value": "valoarea ca text daca nu e numar (ex: negativ), altfel null",
                   "um": "unitatea de masura (ex: mg/dL), sau null",

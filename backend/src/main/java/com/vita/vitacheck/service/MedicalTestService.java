@@ -27,6 +27,7 @@ public class MedicalTestService {
     private final MedicalTestRepository medicalTestRepository;
 
     private final MedicalExtractionService medicalExtractionService;
+    private final MedicalItemsProcessing medicalItemsProcessing;
     private final ObjectMapper objectMapper;
 
     public MedicalTestResponse storeTest(MultipartFile file, User user) throws IOException {
@@ -115,6 +116,8 @@ public class MedicalTestService {
     }
 
     public List<MedicalTestResponse> getUserTests(User user) {
+
+        medicalItemsProcessing.processTestItems(user);
 
         return medicalTestRepository.findByUserOrderByUploadDateDesc(user)
                 .stream()

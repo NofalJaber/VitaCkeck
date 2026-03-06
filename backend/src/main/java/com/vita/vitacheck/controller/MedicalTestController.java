@@ -1,10 +1,12 @@
 package com.vita.vitacheck.controller;
 
+import com.vita.vitacheck.dto.MedicalItemsProcessingResponse;
 import com.vita.vitacheck.dto.MedicalTestItemResponse;
 import com.vita.vitacheck.dto.MedicalTestResponse;
 import com.vita.vitacheck.model.MedicalTest;
 import com.vita.vitacheck.model.User;
 import com.vita.vitacheck.service.MedicalExtractionService;
+import com.vita.vitacheck.service.MedicalItemsProcessing;
 import com.vita.vitacheck.service.MedicalTestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +26,7 @@ public class MedicalTestController {
 
     private final MedicalTestService medicalTestService;
     private final MedicalExtractionService medicalExtractionService;
-
+    private final MedicalItemsProcessing medicalItemsProcessing;
 
     // Upload a new test
     @PostMapping("/upload")
@@ -35,6 +37,19 @@ public class MedicalTestController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<List<MedicalItemsProcessingResponse>> getPlotData (@AuthenticationPrincipal User user)
+    {
+        try{
+            List<MedicalItemsProcessingResponse> response = medicalItemsProcessing.processTestItems(user);
+            return ResponseEntity.ok(response);
+        }
+        catch (RuntimeException e)
+        {
+            return ResponseEntity.badRequest().build();
         }
     }
 
