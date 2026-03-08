@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { testsApi } from "@/lib/axios";
 import {
     LineChart,
@@ -12,12 +12,14 @@ import {
     ResponsiveContainer,
     ReferenceArea
 } from "recharts";
+import { useRouter } from "next/navigation";
 
-// Interfețele bazate pe DTO-ul din backend
 interface Measurement {
     collection_date: string;
     numeric_value: number;
     string_value?: string;
+    medical_test_id: number;
+    file_name: string;
 }
 
 interface AnalyticsData {
@@ -29,6 +31,7 @@ interface AnalyticsData {
 }
 
 export default function AnalyticsPage() {
+    const router = useRouter();
     const [data, setData] = useState<AnalyticsData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -36,12 +39,7 @@ export default function AnalyticsPage() {
     useEffect(() => {
         const fetchAnalytics = async () => {
             try {
-                // Asigură-te că acest URL se potrivește cu controller-ul tău din Spring Boot
                 const response = await testsApi.get("/analytics");
-
-                // Opțional: Putem filtra testele care au o singură măsurătoare dacă vrei grafice doar pentru istoric (evoluție)
-                // const filteredData = response.data.filter((d: AnalyticsData) => d.measurements.length > 1);
-
                 setData(response.data);
             } catch (err) {
                 console.error("Failed to load analytics", err);
@@ -54,7 +52,6 @@ export default function AnalyticsPage() {
         fetchAnalytics();
     }, []);
 
-    // Funcție pentru customizarea Tooltip-ului când faci hover pe un punct
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -67,6 +64,23 @@ export default function AnalyticsPage() {
             );
         }
         return null;
+    };
+
+    const handlePointClick = (pointData: any, testName: string) => {
+        console.log("Datele punctului extras:", pointData);
+
+        const medical_test_id = pointData.test_id || pointData.medical_test_id;
+        const fileName = pointData.file_name || pointData.fileName || "Medical_Document.pdf";
+
+        console.log("Fișier: " + fileName + " | Test ID: " + medical_test_id);
+
+        if (medical_test_id) {
+            console.log("Te trimit către documentul cu ID-ul:", medical_test_id);
+            router.push(`/tests/${medical_test_id}?name=${encodeURIComponent(fileName)}&highlight=${encodeURIComponent(testName)}`);
+        } else {
+            console.error("Eroare! test_id lipsește din punctul acesta:", pointData);
+            alert("ID-ul testului lipsește! Asigură-te că ai restartat backend-ul.");
+        }
     };
 
     return (
@@ -156,6 +170,7 @@ export default function AnalyticsPage() {
                                     <LineChart
                                         data={item.measurements.map(m => ({ ...m, um: item.um }))}
                                         margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                                        style={{ cursor: "pointer" }}
                                     >
                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                                         <XAxis
@@ -172,7 +187,6 @@ export default function AnalyticsPage() {
                                             tickLine={false}
                                             width={45}
                                             tickFormatter={(value) => {
-                                                // Rotunjim la max 2 zecimale și transformăm explicit rezultatul în string
                                                 return parseFloat(value.toFixed(2)).toString();
                                             }}
                                         />
@@ -180,12 +194,7 @@ export default function AnalyticsPage() {
 
                                         {/* Zona Verde */}
                                         {item.min_reference !== null && item.max_reference !== null && (
-                                            <ReferenceArea
-                                                y1={item.min_reference}
-                                                y2={item.max_reference}
-                                                fill="#bbf7d0"
-                                                fillOpacity={0.3}
-                                            />
+                                            <ReferenceArea y1={item.min_reference} y2={item.max_reference} fill="#bbf7d0" fillOpacity={0.3} />
                                         )}
                                         {item.min_reference === null && item.max_reference !== null && (
                                             <ReferenceArea y2={item.max_reference} fill="#bbf7d0" fillOpacity={0.3} />
@@ -200,7 +209,26 @@ export default function AnalyticsPage() {
                                             stroke="#4896bb"
                                             strokeWidth={3}
                                             dot={{ r: 5, fill: '#4896bb', strokeWidth: 2, stroke: '#ffffff' }}
-                                            activeDot={{ r: 7, fill: '#1eb176', strokeWidth: 0 }}
+
+                                            /* * Custom Active Dot: Această componentă randează direct un <circle> SVG HTML 
+                                             * cu propriul lui eveniment onClick nativ. Nu dă greș niciodată!
+                                             */
+                                            activeDot={(props: any) => {
+                                                const { cx, cy, payload } = props;
+                                                return (
+                                                    <circle
+                                                        cx={cx} cy={cy} r={8}
+                                                        fill="#1eb176"
+                                                        stroke="white" strokeWidth={2}
+                                                        className="cursor-pointer transition-all"
+                                                        onClick={(e) => {
+                                                            // Oprim propagarea ca să nu facă trigger și la alte click-uri din fundal
+                                                            e.stopPropagation();
+                                                            handlePointClick(payload, item.test_name);
+                                                        }}
+                                                    />
+                                                );
+                                            }}
                                             animationDuration={1500}
                                         />
                                     </LineChart>

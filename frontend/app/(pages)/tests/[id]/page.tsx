@@ -192,6 +192,7 @@ export default function ViewTestPage() {
 
     const id = params.id as string;
     const fileName = searchParams.get("name") || "Medical_Document.pdf";
+    const highlightParam = searchParams.get("highlight"); // <-- ADD THIS
 
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -241,6 +242,17 @@ export default function ViewTestPage() {
             }
         };
     }, [id]);
+
+    useEffect(() => {
+            if (!fetching && data && highlightParam) {
+                // Find the element by the ID we will assign to the row
+                const element = document.getElementById(`row-${highlightParam}`);
+                if (element) {
+                    // Scroll it smoothly into the center of the view
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }, [fetching, data, highlightParam]);
 
     const handleDownload = () => {
         if (!pdfUrl) return;
@@ -386,7 +398,7 @@ export default function ViewTestPage() {
 
                                     if (item.numeric_value !== null) {
                                         let ranges: Limit[] = [];
-                                        
+
                                         if (item.limits && Array.isArray(item.limits) && item.limits.length > 0) {
                                             ranges = [...item.limits];
                                         }
@@ -459,8 +471,17 @@ export default function ViewTestPage() {
                                     }
 
                                     return (
-                                        <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-4 py-4 font-medium text-gray-800 whitespace-normal max-w-[150px]">{item.test_name}</td>
+                                        <tr
+                                            key={idx}
+                                            id={`row-${item.test_name}`} // <-- ADD THIS ID
+                                            className={`transition-colors duration-1000 ${
+                                                // IF HIGHLIGHTED, MAKE IT YELLOW, OTHERWISE GRAY ON HOVER
+                                                highlightParam === item.test_name ? "bg-yellow-100" : "hover:bg-gray-50/50"
+                                                }`}
+                                        >
+                                            <td className="px-4 py-4 font-medium text-gray-800 whitespace-normal max-w-[150px]">
+                                                {item.test_name}
+                                            </td>
 
                                             <td className="px-4 py-4">
                                                 <span className="font-bold text-gray-900 text-base">

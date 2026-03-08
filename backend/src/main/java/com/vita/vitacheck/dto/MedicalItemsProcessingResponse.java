@@ -11,12 +11,14 @@ public class MedicalItemsProcessingResponse {
     private String um;
     private Double min_reference;
     private Double max_reference;
-    private List<TestItemNeasurementDto> measurements;
+    private List<TestItemMeasurementDto> measurements;
     private List<MedicalTestItemLimits> limits;
 
     @Data
-    public static class TestItemNeasurementDto {
+    public static class TestItemMeasurementDto {
         private String collection_date;
         private Double numeric_value;
+        private Long medical_test_id;
+        private String file_name;
     }
 }

@@ -68,40 +68,36 @@ public class MedicalItemsProcessing {
                     newResponse.setMax_reference(finalMax);
                     newResponse.setLimits(item.getLimits());
 
-                    // AICI se inițializează lista despre care vorbeai
                     newResponse.setMeasurements(new ArrayList<>());
                     return newResponse;
                 });
 
-                // 3. Creăm punctul de pe grafic și îl adăugăm în lista analizei curente
-                MedicalItemsProcessingResponse.TestItemNeasurementDto measurement = new MedicalItemsProcessingResponse.TestItemNeasurementDto();
+                MedicalItemsProcessingResponse.TestItemMeasurementDto measurement = new MedicalItemsProcessingResponse.TestItemMeasurementDto();
 
                 measurement.setCollection_date(date);
                 measurement.setNumeric_value(stdValue);
+                measurement.setMedical_test_id(test.getId());
+                measurement.setFile_name(test.getFileName());
 
-                // Adăugăm în lista de istoric
                 response.getMeasurements().add(measurement);
             }
         }
 
         List<MedicalItemsProcessingResponse> finalResult = new ArrayList<>(groupedItems.values());
 
-        // 5. SORTARE MĂSURĂTORI: Sortăm lista de măsurători a fiecărei analize
-        // cronologic (pentru grafic)
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         for (MedicalItemsProcessingResponse resp : finalResult) {
             resp.getMeasurements().sort((m1, m2) -> {
                 try {
                     LocalDate d1 = LocalDate.parse(m1.getCollection_date(), fmt);
                     LocalDate d2 = LocalDate.parse(m2.getCollection_date(), fmt);
-                    return d1.compareTo(d2); // crescător: vechi -> nou
+                    return d1.compareTo(d2); // oldest first
                 } catch (DateTimeParseException e) {
-                    return 0; // fallback dacă data nu e validă
+                    return 0;
                 }
             });
         }
 
-        // 6. SORTARE ANALIZE: Sortăm analizele alfabetic după nume
         finalResult.sort(Comparator.comparing(MedicalItemsProcessingResponse::getTest_name));
 
         System.out.println("========== REZULTAT PROCESARE GRAFICE ==========");
