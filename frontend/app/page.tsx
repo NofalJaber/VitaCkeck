@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { authApi } from '@/lib/axios';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -51,9 +52,9 @@ export default function LoginPage() {
           <Image
             src="/logo.svg"
             alt="VitaCheck Logo"
-            width={300} // Adjust width as needed
-            height={40} // Adjust height as needed
-            priority // Optional: loads the logo immediately since it's above the fold
+            width={300} 
+            height={40} 
+            priority 
           />
           <p className="text-gray-500">Sign in to your account</p>
         </div>
@@ -89,8 +90,9 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="mb-6 text-center">
-            <p className="text-gray-500">Don't have an account? Sign up <a href="/register" className="text-[#23436aff] hover:underline">here</a></p>
+          <div className="mb-6 text-center space-y-2">
+            <p className="text-gray-500">Don't have an account? Sign up <Link href="/register" className="text-[#23436aff] hover:underline">here</Link></p>
+            <p className="text-gray-500 text-sm">Forgot password? <Link href="/forgot-password" className="text-[#23436aff] hover:underline">Reset here.</Link></p>
           </div>
 
           <button

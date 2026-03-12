@@ -5,6 +5,17 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME} # e.g., your-app@gmail.com
+    password: ${MAIL_PASSWORD} # Google App Password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   
   datasource:
     url: jdbc:postgresql://localhost:5432/${DB_NAME}
