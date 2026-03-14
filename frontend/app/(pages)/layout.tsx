@@ -6,10 +6,9 @@ export default function PagesLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      
-      <main>
+      <main className="pb-8">
         {children}
       </main>
     </div>
