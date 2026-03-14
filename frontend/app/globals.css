@@ -2,7 +2,7 @@
 
 :root {
   /* Primary - Teal/Cyan for healthcare trust */
-  --primary: #0d9488;
+  --primary: #4896bb;
   --primary-foreground: #ffffff;
   
   /* Secondary - Soft slate for balance */
@@ -28,7 +28,7 @@
   /* Border and inputs */
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #0d9488;
+  --ring: #23436aff;
   
   /* Status colors */
   --destructive: #ef4444;

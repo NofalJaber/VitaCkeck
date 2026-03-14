@@ -216,9 +216,9 @@ export default function AnalyticsPage() {
                         <Line
                           type="monotone"
                           dataKey="numeric_value"
-                          stroke="#0d9488"
+                          stroke="#4896bb"
                           strokeWidth={2.5}
-                          dot={{ r: 4, fill: '#0d9488', strokeWidth: 2, stroke: '#ffffff' }}
+                          dot={{ r: 4, fill: '#4896bb', strokeWidth: 2, stroke: '#ffffff' }}
                           activeDot={(props: any) => {
                             const { cx, cy, payload } = props;
                             return (
