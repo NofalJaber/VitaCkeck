@@ -9,12 +9,6 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = Cookies.get('token');
-        if (!token) {
-            router.push('/');
-        } else {
-            setLoading(false);
-        }
     }, [router]);
 
     if (loading) return null;

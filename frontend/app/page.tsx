@@ -22,18 +22,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // 1. Send credentials to backend
-      const response = await authApi.post('/login', { email, password });
+      await authApi.post('/login', { email, password });
 
-      // 2. Get token from response
-      const { token } = response.data;
-
-      // 3. Save token in cookies (expires in 1 day)
-      Cookies.set('token', token, { expires: 1 });
-
-      // 4. Redirect to home
       router.push('/home');
-
     } catch (err: any) {
       // Handle errors (e.g. "Invalid credentials")
       const errorMessage = err.response?.data?.error || 'Login failed';

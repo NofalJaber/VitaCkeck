@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
-import { userApi } from '@/lib/axios';
+import { authApi, userApi } from '@/lib/axios';
 
 // Interface matching your backend UserResponse
 interface UserProfile {
@@ -47,17 +46,12 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    const token = Cookies.get('token');
-    if (!token) {
-      router.push('/');
-      return;
-    }
     fetchUserData();
   }, [router]);
 
   // 2. Handle Logout
-  const handleLogout = () => {
-    Cookies.remove('token');
+  const handleLogout = async () => {
+    await authApi.post('/logout');
     router.push('/');
   };
 
