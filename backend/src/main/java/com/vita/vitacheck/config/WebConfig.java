@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all endpoints
-                        .allowedOrigins("http://64.227.112.102:3000") // Allow your frontend URL
+                        .allowedOrigins("https://vitacheck.online", "https://www.vitacheck.online", "http://localhost:3000") // Allow your frontend URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
+
 // Auth API
 const authApi = axios.create({
-  baseURL: 'http://localhost:8080/api/auth',
+  baseURL: `${API_BASE_URL}/api/auth`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -11,7 +13,7 @@ const authApi = axios.create({
 
 // User API
 const userApi = axios.create({
-  baseURL: 'http://localhost:8080/api/user',
+  baseURL: `${API_BASE_URL}/api/user`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -20,7 +22,7 @@ const userApi = axios.create({
 
 // Tests API
 const testsApi = axios.create({
-  baseURL: 'http://localhost:8080/api/tests',
+  baseURL: `${API_BASE_URL}/api/tests`,
   withCredentials: true,
 });
 

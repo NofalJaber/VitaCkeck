@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.vita.vitacheck.dto.RegisterRequest;
 import com.vita.vitacheck.dto.ResetPasswordRequest;
@@ -22,6 +23,9 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+
+    @Value("${app.cookie.secure:false}") // Default e false (pentru localhost)
+    private boolean secureCookie;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
@@ -41,7 +45,7 @@ public class AuthController {
 
             ResponseCookie cookie = ResponseCookie.from("token", token)
                     .httpOnly(true)
-                    .secure(false)
+                    .secure(secureCookie)
                     .path("/")
                     .maxAge(24 * 60 * 60) // 1 day
                     .sameSite("Lax")
@@ -59,7 +63,7 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> logout() {
         ResponseCookie cookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(secureCookie)
                 .path("/")
                 .maxAge(0)
                 .sameSite("Lax")

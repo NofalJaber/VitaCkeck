@@ -40,3 +40,7 @@ application:
 gemini:
   api:
     keys: ${AI_API_KEYS}
+
+app:
+  cookie:
+    secure: ${COOKIE_SECURE:false}

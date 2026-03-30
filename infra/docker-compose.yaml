@@ -39,6 +39,7 @@ services:
       - AI_API_KEYS=${AI_API_KEYS}
       - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+      - AI_API_KEYS=${AI_API_KEYS}
     networks:
       - db-network
 
