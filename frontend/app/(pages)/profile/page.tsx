@@ -103,27 +103,27 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-6">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Profile Settings</h1>
-        <p className="text-muted-foreground mt-1">Manage your personal information</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Profile Settings</h1>
+        <p className="text-muted-foreground mt-1 text-sm md:text-base">Manage your personal information</p>
       </div>
 
       {/* Profile Card */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
         {/* Profile Header */}
-        <div className="bg-primary/5 border-b border-border p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-2xl font-bold">
+        <div className="bg-primary/5 border-b border-border p-4 md:p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 md:gap-4 w-full">
+              <div className="w-14 h-14 md:w-16 md:h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-xl md:text-2xl font-bold shrink-0">
                 {user?.firstName?.[0]}{user?.lastName?.[0]}
               </div>
-              <div>
-                <h2 className="text-xl font-semibold text-foreground">
+              <div className="overflow-hidden">
+                <h2 className="text-lg md:text-xl font-semibold text-foreground truncate">
                   {user?.firstName} {user?.lastName}
                 </h2>
-                <p className="text-muted-foreground">{user?.email}</p>
+                <p className="text-sm md:text-base text-muted-foreground truncate">{user?.email}</p>
               </div>
             </div>
             {!isEditing && (
@@ -133,7 +133,7 @@ export default function Profile() {
                   setError('');
                   setSuccess('');
                 }}
-                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shrink-0"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -145,9 +145,9 @@ export default function Profile() {
         </div>
 
         {/* Messages */}
-        <div className="p-6 pb-0">
+        <div className="p-4 md:p-6 pb-0">
           {error && (
-            <div className="mb-6 rounded-lg bg-destructive/10 border border-destructive/20 p-4 text-sm text-destructive flex items-center gap-2">
+            <div className="mb-4 md:mb-6 rounded-lg bg-destructive/10 border border-destructive/20 p-4 text-sm text-destructive flex items-center gap-2">
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -155,7 +155,7 @@ export default function Profile() {
             </div>
           )}
           {success && (
-            <div className="mb-6 rounded-lg bg-success/10 border border-success/20 p-4 text-sm text-success flex items-center gap-2">
+            <div className="mb-4 md:mb-6 rounded-lg bg-success/10 border border-success/20 p-4 text-sm text-success flex items-center gap-2">
               <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -165,140 +165,140 @@ export default function Profile() {
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           {user && !isEditing ? (
             // View Mode
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">Full Name</label>
-                <p className="text-foreground font-medium">{user.firstName} {user.lastName}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Full Name</label>
+                <p className="text-foreground font-medium text-sm md:text-base">{user.firstName} {user.lastName}</p>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">Email Address</label>
-                <p className="text-foreground font-medium">{user.email}</p>
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Email Address</label>
+                <p className="text-foreground font-medium text-sm md:text-base break-all">{user.email}</p>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
-                <p className="text-foreground font-medium">{user.phoneNumber}</p>
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Phone Number</label>
+                <p className="text-foreground font-medium text-sm md:text-base">{user.phoneNumber}</p>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">CNP (National Identity)</label>
-                <p className="text-foreground font-medium">{user.cnp}</p>
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">CNP</label>
+                <p className="text-foreground font-medium text-sm md:text-base">{user.cnp}</p>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">Address</label>
-                <p className="text-foreground font-medium">{user.address || 'Not provided'}</p>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-sm font-medium text-muted-foreground">Demographics</label>
-                <p className="text-foreground font-medium">
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0 sm:col-span-2 md:col-span-1">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Demographics</label>
+                <p className="text-foreground font-medium text-sm md:text-base">
                   {user.age} years old - {user.male ? 'Male' : 'Female'}
                 </p>
+              </div>
+
+              <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0 sm:col-span-2">
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Address</label>
+                <p className="text-foreground font-medium text-sm md:text-base">{user.address || 'Not provided'}</p>
               </div>
             </div>
           ) : (
             // Edit Mode
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Email (cannot be changed)</label>
+            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                <div className="sm:col-span-2 md:col-span-1">
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Email (cannot be changed)</label>
                   <input
                     type="text"
                     value={user?.email || ''}
                     disabled
-                    className="w-full rounded-lg border border-border bg-muted px-4 py-3 text-muted-foreground cursor-not-allowed"
+                    className="w-full rounded-lg border border-border bg-muted px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-muted-foreground cursor-not-allowed"
                   />
                 </div>
 
                 <div className="hidden md:block" />
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">First Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">First Name</label>
                   <input
                     name="firstName"
                     value={formData.firstName || ''}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Last Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Last Name</label>
                   <input
                     name="lastName"
                     value={formData.lastName || ''}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Phone Number</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Phone Number</label>
                   <input
                     name="phoneNumber"
                     value={formData.phoneNumber || ''}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">CNP</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">CNP</label>
                   <input
                     name="cnp"
                     value={formData.cnp || ''}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Age</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Age</label>
                   <input
                     name="age"
                     type="number"
                     value={formData.age || ''}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Gender</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Gender</label>
                   <select
                     name="male"
                     value={formData.male ? 'true' : 'false'}
                     onChange={handleGenderChange}
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   >
                     <option value="true">Male</option>
                     <option value="false">Female</option>
                   </select>
                 </div>
 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-foreground mb-2">Address</label>
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Address</label>
                   <textarea
                     name="address"
                     value={formData.address || ''}
                     onChange={handleChange}
                     rows={3}
-                    className="w-full rounded-lg border border-border bg-card px-4 py-3 text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-none"
+                    className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-none"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-border">
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 mt-2 border-t border-border">
                 <button
                   type="button"
                   onClick={() => {
@@ -306,14 +306,14 @@ export default function Profile() {
                     setError('');
                     setFormData(user || {});
                   }}
-                  className="px-4 py-2 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-muted transition-colors"
+                  className="w-full sm:w-auto px-4 py-2 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-muted transition-colors text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className={`px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors flex items-center gap-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`w-full sm:w-auto px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
                   {saving ? (
                     <>
@@ -333,12 +333,12 @@ export default function Profile() {
 
       {/* Danger Zone */}
       {!isEditing && (
-        <div className="mt-8 bg-card border border-border rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-2">Account Actions</h3>
-          <p className="text-muted-foreground text-sm mb-4">Sign out from your account on this device.</p>
+        <div className="mt-6 md:mt-8 bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm">
+          <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 md:mb-2">Account Actions</h3>
+          <p className="text-muted-foreground text-xs md:text-sm mb-4">Sign out from your account on this device.</p>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 rounded-lg bg-destructive text-destructive-foreground font-medium hover:bg-destructive/90 transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-destructive text-destructive-foreground font-medium hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

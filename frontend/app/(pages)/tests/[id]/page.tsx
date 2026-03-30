@@ -97,7 +97,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
     const highPalette = ['bg-orange-200', 'bg-red-200', 'bg-red-300'];
     const startHighIndex = Math.max(0, highPalette.length - totalHighs);
 
-    // Dynamic color assignment based EXACTLY on received `status`
     let segmentColors: string[] = [];
     let highCounter = 0;
     let lowCounter = 0;
@@ -119,7 +118,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
         }
     }
 
-    // Calculate the exact percentage where the patient's dot will sit
     let percent = 0;
     let activeSegment = 0;
 
@@ -141,7 +139,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
         }
     }
 
-    // Explicit mapping to prevent Tailwind from purging classes
     const dotColorMap: Record<string, string> = {
         'bg-blue-200': 'bg-blue-500',
         'bg-blue-300': 'bg-blue-600',
@@ -192,7 +189,7 @@ function ViewTestContent() {
 
     const id = params.id as string;
     const fileName = searchParams.get("name") || "Medical_Document.pdf";
-    const highlightParam = searchParams.get("highlight"); // <-- ADD THIS
+    const highlightParam = searchParams.get("highlight");
 
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -244,15 +241,13 @@ function ViewTestContent() {
     }, [id]);
 
     useEffect(() => {
-            if (!fetching && data && highlightParam) {
-                // Find the element by the ID we will assign to the row
-                const element = document.getElementById(`row-${highlightParam}`);
-                if (element) {
-                    // Scroll it smoothly into the center of the view
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
+        if (!fetching && data && highlightParam) {
+            const element = document.getElementById(`row-${highlightParam}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        }, [fetching, data, highlightParam]);
+        }
+    }, [fetching, data, highlightParam]);
 
     const handleDownload = () => {
         if (!pdfUrl) return;
@@ -281,29 +276,31 @@ function ViewTestContent() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto mt-6 p-4">
-            <div className="flex items-center justify-between mb-4 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="flex items-center gap-4">
+        <div className="max-w-6xl mx-auto mt-4 md:mt-6 p-3 md:p-4">
+            
+            {/* Responsive Header Section */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                <div className="flex items-center gap-3 w-full md:w-auto overflow-hidden">
                     <button
                         onClick={() => router.push("/tests")}
-                        className="flex items-center text-gray-600 hover:text-[#23436aff] hover:bg-gray-100 px-3 py-2 rounded-md transition-all duration-200"
+                        className="flex-shrink-0 flex items-center text-gray-600 hover:text-[#23436aff] hover:bg-gray-100 px-2 md:px-3 py-2 rounded-md transition-all duration-200"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
-                        Back to Tests
+                        <span className="hidden sm:inline">Back</span>
                     </button>
-                    <div className="h-6 w-px bg-gray-300"></div>
-                    <h1 className="text-xl font-bold text-[#23436aff] truncate max-w-md">
+                    <div className="h-6 w-px bg-gray-300 flex-shrink-0"></div>
+                    <h1 className="text-lg md:text-xl font-bold text-[#23436aff] truncate flex-1" title={fileName}>
                         {fileName}
                     </h1>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3">
                     <button
                         onClick={handleAnalyze}
                         disabled={!pdfUrl || isAnalyzing}
-                        className="flex items-center justify-center min-w-[110px] text-sm px-4 py-2 bg-[#1eb176] text-white hover:bg-[#0d744b] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto flex items-center justify-center min-w-[110px] text-sm px-4 py-2.5 bg-[#1eb176] text-white hover:bg-[#0d744b] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                         {isAnalyzing ? (
                             <>
@@ -320,7 +317,7 @@ function ViewTestContent() {
                     <button
                         onClick={handleDownload}
                         disabled={!pdfUrl}
-                        className="flex items-center text-sm px-4 py-2 bg-[#4896bb] text-white hover:bg-[#377a99] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto flex justify-center items-center text-sm px-4 py-2.5 bg-[#4896bb] text-white hover:bg-[#377a99] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -354,29 +351,30 @@ function ViewTestContent() {
 
             {/* EXTRACTED DATA SECTION */}
             {!fetching && data && data.rezults && data.rezults.length > 0 && (
-                <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-8 overflow-hidden">
-                    <h2 className="text-xl font-bold text-[#23436aff] mb-6 flex items-center">
+                <div className="bg-white rounded-xl shadow-md border border-gray-200 p-4 md:p-6 mb-8 overflow-hidden">
+                    <h2 className="text-lg md:text-xl font-bold text-[#23436aff] mb-4 md:mb-6 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-[#4896bb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                         Extracted Medical Data
                     </h2>
 
-                    <div className="flex justify-between items-center mb-6 pb-6 border-b border-gray-100 bg-gray-50 p-4 rounded-lg">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-100 bg-gray-50 p-4 rounded-lg">
                         <div>
                             <span className="text-xs uppercase tracking-wider text-gray-500 block mb-1">Laboratory</span>
                             <span className="font-semibold text-gray-800">{data.laboratory || "N/A"}</span>
                         </div>
 
-                        <div className="text-right">
+                        <div className="sm:text-right">
                             <span className="text-xs uppercase tracking-wider text-gray-500 block mb-1">Collection Date</span>
                             <span className="font-semibold text-gray-800">{data.collection_date || "N/A"}</span>
                         </div>
                     </div>
 
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full text-left text-sm whitespace-nowrap">
-                            <thead className="border-b border-gray-200 text-gray-500">
+                    {/* Table Transformed to Cards on Mobile */}
+                    <div className="w-full">
+                        <table className="block md:table w-full text-left text-sm whitespace-nowrap md:whitespace-normal">
+                            <thead className="hidden md:table-header-group border-b border-gray-200 text-gray-500">
                                 <tr>
                                     <th className="px-4 py-3 font-medium">Test Name</th>
                                     <th className="px-4 py-3 font-medium">Result</th>
@@ -385,7 +383,7 @@ function ViewTestContent() {
                                     <th className="px-4 py-3 font-medium text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="block md:table-row-group divide-y-0 md:divide-y md:divide-gray-100">
                                 {data.rezults.map((item, idx) => {
                                     const refRange = item.text_reference
                                         ? item.text_reference
@@ -473,38 +471,56 @@ function ViewTestContent() {
                                     return (
                                         <tr
                                             key={idx}
-                                            id={`row-${item.test_name}`} // <-- ADD THIS ID
-                                            className={`transition-colors duration-1000 ${
-                                                // IF HIGHLIGHTED, MAKE IT YELLOW, OTHERWISE GRAY ON HOVER
-                                                highlightParam === item.test_name ? "bg-yellow-100" : "hover:bg-gray-50/50"
-                                                }`}
+                                            id={`row-${item.test_name}`}
+                                            className={`flex flex-col md:table-row border border-gray-200 md:border-transparent rounded-xl md:rounded-none mb-4 md:mb-0 p-4 md:p-0 transition-colors duration-1000 shadow-sm md:shadow-none ${
+                                                highlightParam === item.test_name ? "bg-yellow-100" : "bg-white hover:bg-gray-50/50"
+                                            }`}
                                         >
-                                            <td className="px-4 py-4 font-medium text-gray-800 whitespace-normal max-w-[150px]">
-                                                {item.test_name}
-                                            </td>
-
-                                            <td className="px-4 py-4">
-                                                <span className="font-bold text-gray-900 text-base">
-                                                    {item.numeric_value !== null ? item.numeric_value : item.string_value || "-"}
+                                            {/* 1. Nume Test & Status Badge (pe mobil) */}
+                                            <td className="order-1 flex justify-between items-start md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-gray-100 md:border-none mb-2 md:mb-0">
+                                                <span className="font-bold text-gray-800 text-base md:text-sm whitespace-normal md:max-w-[200px] pr-2">
+                                                    {item.test_name}
                                                 </span>
-                                                <span className="text-gray-500 ml-1 text-xs">{item.um || ""}</span>
+                                                <span className={`md:hidden shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${badgeColorClass}`}>
+                                                    {badgeText}
+                                                </span>
                                             </td>
 
-                                            <td className="px-4 py-4">
-                                                <RangeIndicator
-                                                    value={item.numeric_value}
-                                                    min={item.min_reference}
-                                                    max={item.max_reference}
-                                                    textReference={item.text_reference}
-                                                    limits={item.limits}
-                                                />
+                                            {/* 2. Rezultat */}
+                                            <td className="order-2 flex justify-between items-center md:table-cell px-0 md:px-4 py-2 md:py-4">
+                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider">Rezultat</span>
+                                                <div className="text-right md:text-left">
+                                                    <span className="font-bold text-gray-900 text-lg md:text-base">
+                                                        {item.numeric_value !== null ? item.numeric_value : item.string_value || "-"}
+                                                    </span>
+                                                    <span className="text-gray-500 ml-1 text-sm md:text-xs">{item.um || ""}</span>
+                                                </div>
                                             </td>
 
-                                            <td className="px-4 py-4 text-gray-500 text-[11px] whitespace-normal max-w-[200px] leading-snug">
-                                                {refRange}
+                                            {/* 3. Grafic Indicator (Afisat sub referinta pe mobil via order-4) */}
+                                            <td className="order-4 md:order-3 block md:table-cell px-0 md:px-4 py-3 md:py-4 w-full md:w-64 pt-4 md:pt-4">
+                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-6 text-center">Grafic Indicator</span>
+                                                <div className="w-full px-2 md:px-0">
+                                                    <RangeIndicator
+                                                        value={item.numeric_value}
+                                                        min={item.min_reference}
+                                                        max={item.max_reference}
+                                                        textReference={item.text_reference}
+                                                        limits={item.limits}
+                                                    />
+                                                </div>
                                             </td>
 
-                                            <td className="px-4 py-4 text-center">
+                                            {/* 4. Interval Referinta (Afisat deasupra graficului pe mobil via order-3) */}
+                                            <td className="order-3 md:order-4 flex justify-between items-center md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-gray-100 md:border-none mb-2 md:mb-0">
+                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider">Referință</span>
+                                                <span className="text-gray-600 font-medium md:font-normal text-sm md:text-[11px] whitespace-normal max-w-[200px] text-right md:text-left leading-snug">
+                                                    {refRange}
+                                                </span>
+                                            </td>
+
+                                            {/* 5. Status Badge (Doar Desktop) */}
+                                            <td className="order-5 hidden md:table-cell px-4 py-4 text-center">
                                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${badgeColorClass}`}>
                                                     {badgeText}
                                                 </span>
