@@ -132,7 +132,7 @@ export default function TestsPage() {
 
             <form onSubmit={handleUpload} className="space-y-4">
               <div 
-                className={`border-2 border-dashed rounded-xl p-6 text-center transition-colors ${file ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
+                className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer ${file ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
                 onClick={() => fileInputRef.current?.click()}
               >
                 <input
@@ -168,7 +168,7 @@ export default function TestsPage() {
               <button
                 type="submit"
                 disabled={loading || !file}
-                className={`w-full py-3 px-4 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 ${
+                className={`w-full py-3 px-4 rounded-xl font-medium flex items-center justify-center gap-2 ${
                   loading || !file
                     ? "bg-muted text-muted-foreground cursor-not-allowed"
                     : "bg-primary text-primary-foreground hover:bg-primary/90"
@@ -234,7 +234,7 @@ export default function TestsPage() {
             ) : (
               <ul className="divide-y divide-border">
                 {tests.map((test) => (
-                  <li key={test.id} className="p-4 hover:bg-muted/30 transition-colors">
+                  <li key={test.id} className="p-4 hover:bg-muted/30">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-destructive/10 rounded-xl flex items-center justify-center flex-shrink-0">
                         <svg className="w-6 h-6 text-destructive" fill="currentColor" viewBox="0 0 24 24">
@@ -254,7 +254,7 @@ export default function TestsPage() {
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <button
                           onClick={() => handleView(test.id, test.fileName)}
-                          className="p-2 rounded-lg text-primary bg-primary/10 hover:bg-primary/20 transition-colors"
+                          className="p-2 rounded-lg text-primary bg-primary/10 hover:bg-primary/20"
                           title="View"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,7 +264,7 @@ export default function TestsPage() {
                         </button>
                         <button
                           onClick={() => handleDownload(test.id, test.fileName, test.fileType)}
-                          className="p-2 rounded-lg text-muted-foreground bg-muted hover:bg-muted/70 transition-colors"
+                          className="p-2 rounded-lg text-muted-foreground bg-muted hover:bg-primary/20"
                           title="Download"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -273,7 +273,7 @@ export default function TestsPage() {
                         </button>
                         <button
                           onClick={() => handleDelete(test.id)}
-                          className="p-2 rounded-lg text-destructive bg-destructive/10 hover:bg-destructive/20 transition-colors"
+                          className="p-2 rounded-lg text-destructive bg-destructive/10 hover:bg-destructive/20"
                           title="Delete"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

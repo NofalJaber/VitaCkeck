@@ -29,10 +29,9 @@ interface MedicalTestItems {
     rezults: TestData[];
 }
 
-// --- HELPER COMPONENT: Range Indicator Graphic ---
 const RangeIndicator = ({ value, min, max, textReference, limits }: { value: number | null, min: number | null, max: number | null, textReference: string | null, limits: Limit[] | null }) => {
     if (value === null) {
-        return <span className="text-gray-400 text-[11px] italic">N/A graphic</span>;
+        return <span className="text-muted-foreground text-[11px] italic">N/A graphic</span>;
     }
 
     let ranges: Limit[] = [];
@@ -57,7 +56,7 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
                 { status: 'NORMAL', lowerBound: min, upperBound: null, label: 'Normal' }
             ];
         } else {
-            return <span className="text-gray-400 text-[11px] italic">No reference</span>;
+            return <span className="text-muted-foreground text-[11px] italic">No reference</span>;
         }
     }
 
@@ -65,7 +64,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
         ranges.shift();
     }
 
-    // Extract numerical thresholds that divide the segments
     let thresholds: number[] = [];
     for (let i = 0; i < ranges.length - 1; i++) {
         const boundary = ranges[i].upperBound !== null ? ranges[i].upperBound : ranges[i + 1].lowerBound;
@@ -74,7 +72,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
         }
     }
 
-    // 4. Build absolute bounds of the bar (minBound and maxBound)
     let minBound = 0;
     if (thresholds.length > 0) {
         minBound = thresholds[0] > 0 ? 0 : thresholds[0] - Math.abs(thresholds[0] * 0.5);
@@ -92,7 +89,6 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
     const numSegments = ranges.length;
     const segmentWidth = 100 / numSegments;
 
-    // Dynamic Color calculation for HIGH states
     const totalHighs = ranges.filter(r => r.status === 'HIGH').length;
     const highPalette = ['bg-orange-200', 'bg-red-200', 'bg-red-300'];
     const startHighIndex = Math.max(0, highPalette.length - totalHighs);
@@ -122,10 +118,10 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
     let activeSegment = 0;
 
     if (value < points[0]) {
-        percent = 2; // Min visible
+        percent = 2; 
         activeSegment = 0;
     } else if (value > points[points.length - 1]) {
-        percent = 98; // Max visible
+        percent = 98; 
         activeSegment = numSegments - 1;
     } else {
         for (let i = 0; i < numSegments; i++) {
@@ -150,16 +146,16 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
     };
 
     const activeBgClass = segmentColors[activeSegment];
-    const dotColorClass = activeBgClass ? dotColorMap[activeBgClass] : 'bg-gray-500';
+    const dotColorClass = activeBgClass ? dotColorMap[activeBgClass] : 'bg-muted-foreground';
 
     return (
         <div className="relative w-full min-w-[150px] max-w-60 h-12 flex flex-col justify-center mx-auto">
-            <div className="flex w-full h-1.5 rounded-full overflow-hidden bg-gray-100">
+            <div className="flex w-full h-1.5 rounded-full overflow-hidden bg-muted">
                 {segmentColors.map((color, idx) => (
                     <div
                         key={idx}
                         className={`h-full ${color}`}
-                        style={{ width: `${segmentWidth}%`, borderRight: idx < numSegments - 1 ? '1.5px solid white' : 'none' }}
+                        style={{ width: `${segmentWidth}%`, borderRight: idx < numSegments - 1 ? '1.5px solid var(--card)' : 'none' }}
                     ></div>
                 ))}
             </div>
@@ -167,7 +163,7 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
             {thresholds.map((t, idx) => (
                 <div
                     key={idx}
-                    className="absolute top-7 text-[10px] font-semibold text-gray-500 -translate-x-1/2 mt-0.5 whitespace-nowrap"
+                    className="absolute top-7 text-[10px] font-semibold text-muted-foreground -translate-x-1/2 mt-0.5 whitespace-nowrap"
                     style={{ left: `${(idx + 1) * segmentWidth}%` }}
                 >
                     {t}
@@ -175,7 +171,7 @@ const RangeIndicator = ({ value, min, max, textReference, limits }: { value: num
             ))}
 
             <div
-                className={`absolute w-3.5 h-3.5 rounded-full border-2 border-white shadow-md ${dotColorClass} top-1/2 -translate-y-[150%] -ml-[7px] transition-all duration-700 ease-out z-10`}
+                className={`absolute w-3.5 h-3.5 rounded-full border-2 border-card shadow-md ${dotColorClass} top-1/2 -translate-y-[150%] -ml-[7px] transition-transform duration-700 ease-out z-10`}
                 style={{ left: `${percent}%` }}
             ></div>
         </div>
@@ -279,19 +275,19 @@ function ViewTestContent() {
         <div className="max-w-6xl mx-auto mt-4 md:mt-6 p-3 md:p-4">
             
             {/* Responsive Header Section */}
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 bg-card p-4 rounded-lg shadow-sm border border-border">
                 <div className="flex items-center gap-3 w-full md:w-auto overflow-hidden">
                     <button
                         onClick={() => router.push("/tests")}
-                        className="flex-shrink-0 flex items-center text-gray-600 hover:text-[#23436aff] hover:bg-gray-100 px-2 md:px-3 py-2 rounded-md transition-all duration-200"
+                        className="flex-shrink-0 flex items-center text-muted-foreground hover:text-foreground hover:bg-muted px-2 md:px-3 py-2 rounded-md"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                         <span className="hidden sm:inline">Back</span>
                     </button>
-                    <div className="h-6 w-px bg-gray-300 flex-shrink-0"></div>
-                    <h1 className="text-lg md:text-xl font-bold text-[#23436aff] truncate flex-1" title={fileName}>
+                    <div className="h-6 w-px bg-border flex-shrink-0"></div>
+                    <h1 className="text-lg md:text-xl font-bold text-foreground truncate flex-1" title={fileName}>
                         {fileName}
                     </h1>
                 </div>
@@ -300,7 +296,7 @@ function ViewTestContent() {
                     <button
                         onClick={handleAnalyze}
                         disabled={!pdfUrl || isAnalyzing}
-                        className="w-full sm:w-auto flex items-center justify-center min-w-[110px] text-sm px-4 py-2.5 bg-[#1eb176] text-white hover:bg-[#0d744b] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto flex items-center justify-center min-w-[110px] text-sm px-4 py-2.5 bg-[#1eb176] text-white hover:bg-[#0d744b] rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isAnalyzing ? (
                             <>
@@ -317,7 +313,7 @@ function ViewTestContent() {
                     <button
                         onClick={handleDownload}
                         disabled={!pdfUrl}
-                        className="w-full sm:w-auto flex justify-center items-center text-sm px-4 py-2.5 bg-[#4896bb] text-white hover:bg-[#377a99] rounded-md font-medium transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto flex justify-center items-center text-sm px-4 py-2.5 bg-[#4896bb] text-white hover:bg-[#377a99] rounded-md font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -328,22 +324,22 @@ function ViewTestContent() {
             </div>
 
             {message && (
-                <div className={`mb-4 p-3 rounded-md text-sm font-medium ${message.includes("successfully") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                <div className={`mb-4 p-3 rounded-md text-sm font-medium ${message.includes("successfully") ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>
                     {message}
                 </div>
             )}
 
-            <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden mb-6" style={{ height: "calc(100vh - 280px)", minHeight: "500px" }}>
+            <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden mb-6" style={{ height: "calc(100vh - 280px)", minHeight: "500px" }}>
                 {loading && (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                        <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-[#4896bb]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <div className="flex items-center justify-center h-full text-muted-foreground">
+                        <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                         Loading Document...
                     </div>
                 )}
-                {error && <div className="flex items-center justify-center h-full text-red-500 font-medium">{error}</div>}
+                {error && <div className="flex items-center justify-center h-full text-destructive font-medium">{error}</div>}
                 {pdfUrl && !loading && (
                     <iframe src={`${pdfUrl}#toolbar=0`} className="w-full h-full border-none" title={fileName} />
                 )}
@@ -351,30 +347,29 @@ function ViewTestContent() {
 
             {/* EXTRACTED DATA SECTION */}
             {!fetching && data && data.rezults && data.rezults.length > 0 && (
-                <div className="bg-white rounded-xl shadow-md border border-gray-200 p-4 md:p-6 mb-8 overflow-hidden">
-                    <h2 className="text-lg md:text-xl font-bold text-[#23436aff] mb-4 md:mb-6 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-[#4896bb]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="bg-card rounded-xl shadow-md border border-border p-4 md:p-6 mb-8 overflow-hidden">
+                    <h2 className="text-lg md:text-xl font-bold text-foreground mb-4 md:mb-6 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                         Extracted Medical Data
                     </h2>
 
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-100 bg-gray-50 p-4 rounded-lg">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-border bg-muted/30 p-4 rounded-lg">
                         <div>
-                            <span className="text-xs uppercase tracking-wider text-gray-500 block mb-1">Laboratory</span>
-                            <span className="font-semibold text-gray-800">{data.laboratory || "N/A"}</span>
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-1">Laboratory</span>
+                            <span className="font-semibold text-foreground">{data.laboratory || "N/A"}</span>
                         </div>
 
                         <div className="sm:text-right">
-                            <span className="text-xs uppercase tracking-wider text-gray-500 block mb-1">Collection Date</span>
-                            <span className="font-semibold text-gray-800">{data.collection_date || "N/A"}</span>
+                            <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-1">Collection Date</span>
+                            <span className="font-semibold text-foreground">{data.collection_date || "N/A"}</span>
                         </div>
                     </div>
 
-                    {/* Table Transformed to Cards on Mobile */}
                     <div className="w-full">
                         <table className="block md:table w-full text-left text-sm whitespace-nowrap md:whitespace-normal">
-                            <thead className="hidden md:table-header-group border-b border-gray-200 text-gray-500">
+                            <thead className="hidden md:table-header-group border-b border-border text-muted-foreground">
                                 <tr>
                                     <th className="px-4 py-3 font-medium">Test Name</th>
                                     <th className="px-4 py-3 font-medium">Result</th>
@@ -383,7 +378,7 @@ function ViewTestContent() {
                                     <th className="px-4 py-3 font-medium text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="block md:table-row-group divide-y-0 md:divide-y md:divide-gray-100">
+                            <tbody className="block md:table-row-group divide-y-0 md:divide-y md:divide-border/50">
                                 {data.rezults.map((item, idx) => {
                                     const refRange = item.text_reference
                                         ? item.text_reference
@@ -391,7 +386,7 @@ function ViewTestContent() {
                                             ? `${item.min_reference} - ${item.max_reference}`
                                             : "-";
 
-                                    let badgeColorClass = "bg-gray-100 text-gray-700";
+                                    let badgeColorClass = "bg-muted text-foreground";
                                     let badgeText = item.flag || "Unknown";
 
                                     if (item.numeric_value !== null) {
@@ -443,27 +438,27 @@ function ViewTestContent() {
                                         }
 
                                         if (matchedStatus === 'LOW') {
-                                            badgeColorClass = "bg-blue-100 text-blue-700";
+                                            badgeColorClass = "bg-blue-500/10 text-blue-500";
                                         } else if (matchedStatus === 'HIGH') {
-                                            badgeColorClass = "bg-red-100 text-red-700";
+                                            badgeColorClass = "bg-destructive/10 text-destructive";
                                         } else if (matchedStatus === 'INCONCLUSIVE') {
-                                            badgeColorClass = "bg-yellow-100 text-yellow-700";
+                                            badgeColorClass = "bg-yellow-500/10 text-yellow-500";
                                         } else {
-                                            badgeColorClass = "bg-green-100 text-green-700";
+                                            badgeColorClass = "bg-success/10 text-success";
                                             if (!item.flag) badgeText = "Normal";
                                         }
 
                                     } else {
                                         if (item.flag && item.flag !== "NORMAL" && item.flag !== "Normal" && item.flag !== "Acceptabil") {
                                             if (item.flag.toUpperCase().includes('CRESCUT') || item.flag.toUpperCase() === 'HIGH') {
-                                                badgeColorClass = "bg-red-100 text-red-700";
+                                                badgeColorClass = "bg-destructive/10 text-destructive";
                                             } else if (item.flag.toLowerCase().includes('limita') || item.flag.toLowerCase().includes('inconclusive')) {
-                                                badgeColorClass = "bg-yellow-100 text-yellow-700";
+                                                badgeColorClass = "bg-yellow-500/10 text-yellow-500";
                                             } else {
-                                                badgeColorClass = "bg-blue-100 text-blue-700";
+                                                badgeColorClass = "bg-blue-500/10 text-blue-500";
                                             }
                                         } else {
-                                            badgeColorClass = "bg-green-100 text-green-700";
+                                            badgeColorClass = "bg-success/10 text-success";
                                             badgeText = item.flag || "Normal";
                                         }
                                     }
@@ -472,13 +467,13 @@ function ViewTestContent() {
                                         <tr
                                             key={idx}
                                             id={`row-${item.test_name}`}
-                                            className={`flex flex-col md:table-row border border-gray-200 md:border-transparent rounded-xl md:rounded-none mb-4 md:mb-0 p-4 md:p-0 transition-colors duration-1000 shadow-sm md:shadow-none ${
-                                                highlightParam === item.test_name ? "bg-yellow-100" : "bg-white hover:bg-gray-50/50"
+                                            className={`flex flex-col md:table-row border border-border md:border-transparent rounded-xl md:rounded-none mb-4 md:mb-0 p-4 md:p-0 shadow-sm md:shadow-none ${
+                                                highlightParam === item.test_name ? "bg-accent/20" : "bg-card hover:bg-muted/50"
                                             }`}
                                         >
                                             {/* 1. Nume Test & Status Badge (pe mobil) */}
-                                            <td className="order-1 flex justify-between items-start md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-gray-100 md:border-none mb-2 md:mb-0">
-                                                <span className="font-bold text-gray-800 text-base md:text-sm whitespace-normal md:max-w-[200px] pr-2">
+                                            <td className="order-1 flex justify-between items-start md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-border md:border-none mb-2 md:mb-0">
+                                                <span className="font-bold text-foreground text-base md:text-sm whitespace-normal md:max-w-[200px] pr-2">
                                                     {item.test_name}
                                                 </span>
                                                 <span className={`md:hidden shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${badgeColorClass}`}>
@@ -488,18 +483,18 @@ function ViewTestContent() {
 
                                             {/* 2. Rezultat */}
                                             <td className="order-2 flex justify-between items-center md:table-cell px-0 md:px-4 py-2 md:py-4">
-                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider">Rezultat</span>
+                                                <span className="md:hidden text-xs font-semibold text-muted-foreground uppercase tracking-wider">Rezultat</span>
                                                 <div className="text-right md:text-left">
-                                                    <span className="font-bold text-gray-900 text-lg md:text-base">
+                                                    <span className="font-bold text-foreground text-lg md:text-base">
                                                         {item.numeric_value !== null ? item.numeric_value : item.string_value || "-"}
                                                     </span>
-                                                    <span className="text-gray-500 ml-1 text-sm md:text-xs">{item.um || ""}</span>
+                                                    <span className="text-muted-foreground ml-1 text-sm md:text-xs">{item.um || ""}</span>
                                                 </div>
                                             </td>
 
-                                            {/* 3. Grafic Indicator (Afisat sub referinta pe mobil via order-4) */}
+                                            {/* 3. Grafic Indicator */}
                                             <td className="order-4 md:order-3 block md:table-cell px-0 md:px-4 py-3 md:py-4 w-full md:w-64 pt-4 md:pt-4">
-                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider block mb-6 text-center">Grafic Indicator</span>
+                                                <span className="md:hidden text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-6 text-center">Grafic Indicator</span>
                                                 <div className="w-full px-2 md:px-0">
                                                     <RangeIndicator
                                                         value={item.numeric_value}
@@ -511,10 +506,10 @@ function ViewTestContent() {
                                                 </div>
                                             </td>
 
-                                            {/* 4. Interval Referinta (Afisat deasupra graficului pe mobil via order-3) */}
-                                            <td className="order-3 md:order-4 flex justify-between items-center md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-gray-100 md:border-none mb-2 md:mb-0">
-                                                <span className="md:hidden text-xs font-semibold text-gray-400 uppercase tracking-wider">Referință</span>
-                                                <span className="text-gray-600 font-medium md:font-normal text-sm md:text-[11px] whitespace-normal max-w-[200px] text-right md:text-left leading-snug">
+                                            {/* 4. Interval Referinta */}
+                                            <td className="order-3 md:order-4 flex justify-between items-center md:table-cell px-0 md:px-4 py-2 md:py-4 border-b border-border md:border-none mb-2 md:mb-0">
+                                                <span className="md:hidden text-xs font-semibold text-muted-foreground uppercase tracking-wider">Referință</span>
+                                                <span className="text-foreground font-medium md:font-normal text-sm md:text-[11px] whitespace-normal max-w-[200px] text-right md:text-left leading-snug">
                                                     {refRange}
                                                 </span>
                                             </td>
@@ -540,8 +535,8 @@ function ViewTestContent() {
 export default function ViewTestPage() {
     return (
         <Suspense fallback={
-            <div className="flex items-center justify-center min-h-screen text-gray-500">
-                <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-[#4896bb]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <div className="flex items-center justify-center min-h-screen text-muted-foreground">
+                <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>

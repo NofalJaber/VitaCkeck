@@ -147,7 +147,7 @@ export default function HomePage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {/* Upload Card */}
-        <div className="bg-card border border-border rounded-xl p-6 hover:shadow-md transition-shadow">
+        <div className="bg-card border border-border rounded-xl p-6 hover:shadow-md hover:border-primary/30 transition-transform transition-shadow duration-200">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +167,7 @@ export default function HomePage() {
               onChange={handleFileUpload}
               className="hidden"
             />
-            <span className={`block w-full text-center py-2.5 px-4 rounded-lg border-2 border-dashed border-border bg-muted/50 text-sm font-medium cursor-pointer hover:border-primary hover:bg-primary/5 transition-all ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <span className={`block w-full text-center py-2.5 px-4 rounded-lg border-2 border-dashed border-border bg-muted/50 text-sm font-medium cursor-pointer hover:border-primary hover:bg-primary/5 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {uploading ? 'Uploading...' : 'Choose PDF file'}
             </span>
           </label>
@@ -179,7 +179,7 @@ export default function HomePage() {
         </div>
 
         {/* View All Tests */}
-        <Link href="/tests" className="bg-card border border-border rounded-xl p-6 hover:shadow-md hover:border-primary/30 transition-all group">
+        <Link href="/tests" className="bg-card border border-border rounded-xl p-6 hover:shadow-md hover:border-primary/30 transition-transform transition-shadow duration-200 group">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,17 +187,17 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">My Tests</h3>
+              <h3 className="font-semibold text-foreground group-hover:text-primary">My Tests</h3>
               <p className="text-sm text-muted-foreground">View all uploaded tests</p>
             </div>
-            <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </div>
         </Link>
 
         {/* View Analytics */}
-        <Link href="/analytics" className="bg-card border border-border rounded-xl p-6 hover:shadow-md hover:border-primary/30 transition-all group">
+        <Link href="/analytics" className="bg-card border border-border rounded-xl p-6 hover:shadow-md hover:border-primary/30 transition-transform transition-shadow duration-200 group">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,10 +205,10 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">Analytics</h3>
+              <h3 className="font-semibold text-foreground group-hover:text-primary">Analytics</h3>
               <p className="text-sm text-muted-foreground">View detailed graphs</p>
             </div>
-            <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </div>
@@ -251,7 +251,7 @@ export default function HomePage() {
               const yAxisMax = finalTop + Math.abs(finalTop * 0.05);
 
               return (
-                <div key={idx} className="bg-card border border-border rounded-xl p-5 hover:shadow-md transition-shadow">
+                <div key={idx} className="bg-card border border-border rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <h3 className="font-semibold text-foreground">{item.test_name}</h3>
@@ -264,7 +264,7 @@ export default function HomePage() {
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={item.measurements.map(m => ({ ...m, um: item.um }))} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" strokeOpacity={0.2} />
                         <XAxis dataKey="collection_date" tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} />
                         <YAxis domain={[yAxisMin, yAxisMax]} tick={{ fontSize: 10, fill: '#64748b' }} axisLine={false} tickLine={false} width={40} tickFormatter={(value) => parseFloat(value.toFixed(1)).toString()} />
                         <Tooltip content={<CustomTooltip />} />
@@ -283,7 +283,7 @@ export default function HomePage() {
                               <circle
                                 cx={cx} cy={cy} r={6}
                                 fill="#10b981"
-                                stroke="white" strokeWidth={2}
+                                stroke="var(--card)" strokeWidth={2}
                                 className="cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -337,7 +337,7 @@ export default function HomePage() {
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <ul className="divide-y divide-border">
               {recentTests.map((test) => (
-                <li key={test.id} className="p-4 hover:bg-muted/50 transition-colors">
+                <li key={test.id} className="p-4 hover:bg-muted/50 transition-colors duration-200">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-destructive/10 rounded-lg flex items-center justify-center">
