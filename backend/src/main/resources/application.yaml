@@ -5,17 +5,6 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME} # e.g., your-app@gmail.com
-    password: ${MAIL_PASSWORD} # Google App Password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
   
   datasource:
     url: jdbc:postgresql://localhost:5432/${DB_NAME}
@@ -41,6 +30,14 @@ gemini:
   api:
     keys: ${AI_API_KEYS}
 
+resend:
+  api:
+    key: ${RESEND_API_KEY:your_local_api_key_here}
+  sender:
+    email: ${MAIL_USERNAME:onboarding@resend.dev}
+
 app:
   cookie:
     secure: ${COOKIE_SECURE:false}
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:3000}

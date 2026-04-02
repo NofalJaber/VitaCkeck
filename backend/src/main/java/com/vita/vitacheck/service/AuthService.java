@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,8 +82,14 @@ public class AuthService {
         PasswordResetToken resetToken = new PasswordResetToken(token, user);
         tokenRepository.save(resetToken);
 
-        // Send Email
-        emailService.sendPasswordResetEmail(user.getEmail(), token);
+        final String userEmail = user.getEmail();
+        CompletableFuture.runAsync(() -> {
+            try {
+                emailService.sendPasswordResetEmail(userEmail, token);
+            } catch (Exception e) {
+                System.err.println("Eroare la trimiterea emailului in fundal: " + e.getMessage());
+            }
+        });
     }
 
     @Transactional
