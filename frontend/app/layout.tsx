@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeController from "@/components/ThemeController";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +30,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark')
+                var path = window.location.pathname;
+                var isAuth = path === '/' || path.startsWith('/register') || path.startsWith('/forgot-password') || path.startsWith('/reset-password');
+                
+                if (isAuth) {
+                  // Previne orice încărcare întunecată la paginile de acces
+                  document.documentElement.classList.remove('dark');
+                } else if (localStorage.theme === 'dark') {
+                  document.documentElement.classList.add('dark');
                 } else {
-                  document.documentElement.classList.remove('dark')
+                  document.documentElement.classList.remove('dark');
                 }
               } catch (_) {}
             `,
@@ -40,6 +47,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeController />
         {children}
       </body>
     </html>
