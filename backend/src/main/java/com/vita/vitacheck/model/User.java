@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.vita.vitacheck.config.StringEncryptionConverter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,16 +35,23 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    
+    @Column(columnDefinition = "TEXT", nullable = false, unique = true)
+    @Convert(converter = StringEncryptionConverter.class)
     private String cnp;
 
-    @Column(nullable = false, unique = true)
+    @Column(columnDefinition = "TEXT", nullable = false, unique = true)
+    @Convert(converter = StringEncryptionConverter.class)
     private String phoneNumber;
 
     private String firstName;
     private String lastName;
     private boolean isMale;
+
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = StringEncryptionConverter.class)
     private String address;
+
     private Integer age;
 
     @Builder.Default

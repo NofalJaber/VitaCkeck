@@ -10,7 +10,9 @@ import com.vita.vitacheck.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,6 +45,11 @@ public class AuthService {
 
         System.out.println("Registering user: " + request.toString());
 
+        Integer calculatedAge = request.getAge();
+        if (calculatedAge == null) {
+            calculatedAge = extractAgeFromCnp(request.getCnp());
+        }
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -52,7 +59,7 @@ public class AuthService {
                 .phoneNumber(request.getPhoneNumber())
                 .isMale(request.isMale())
                 .address(request.getAddress())
-                .age(request.getAge())
+                .age(calculatedAge)
                 .build();
 
         return userRepository.save(user);
@@ -108,5 +115,35 @@ public class AuthService {
 
         // Delete token so it can't be used again
         tokenRepository.delete(resetToken);
+    }
+
+    private Integer extractAgeFromCnp(String cnp) {
+        if (cnp == null || cnp.length() < 7) {
+            return null;
+        }
+
+        try {
+            int firstDigit = Character.getNumericValue(cnp.charAt(0));
+            int year = Integer.parseInt(cnp.substring(1, 3));
+            int month = Integer.parseInt(cnp.substring(3, 5));
+            int day = Integer.parseInt(cnp.substring(5, 7));
+
+            int century;
+            if (firstDigit == 1 || firstDigit == 2) {
+                century = 1900;
+            } else if (firstDigit == 3 || firstDigit == 4) {
+                century = 1800;
+            } else if (firstDigit == 5 || firstDigit == 6) {
+                century = 2000;
+            } else {
+                century = (year + 2000 > LocalDate.now().getYear()) ? 1900 : 2000;
+            }
+
+            LocalDate birthDate = LocalDate.of(century + year, month, day);
+            return Period.between(birthDate, LocalDate.now()).getYears();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

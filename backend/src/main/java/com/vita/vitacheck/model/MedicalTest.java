@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.vita.vitacheck.config.StringEncryptionConverter;
+import com.vita.vitacheck.config.ByteArrayEncryptionConverter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +28,14 @@ public class MedicalTest {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Convert(converter = StringEncryptionConverter.class)
     private String fileName;
+
     private String fileType;
     private LocalDateTime uploadDate;
 
     @Column(columnDefinition = "bytea")
+    @Convert(converter = ByteArrayEncryptionConverter.class)
     private byte[] data;
 
     private String laboratoryName;
