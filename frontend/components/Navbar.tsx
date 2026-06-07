@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import InstallButton from './InstallButton';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -98,8 +99,8 @@ export default function Navbar() {
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === item.href
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-muted'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-foreground hover:bg-muted'
                   }`}
               >
                 {item.icon}
@@ -109,23 +110,31 @@ export default function Navbar() {
           </nav>
 
           {/* Menu Footer */}
-          <div className="p-4 border-t border-border">
-            <Link
-              href="/profile"
-              onClick={() => setIsMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === '/profile'
+          <nav className="w-full flex items-center justify-between p-4 bg-transparent">
+            <div className="p-4 border-t border-border">
+              <Link
+                href="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === '/profile'
                   ? 'bg-primary text-primary-foreground'
                   : 'text-foreground hover:bg-muted'
-                }`}
-            >
-              <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+                  }`}
+              >
+                <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <span className="font-medium">Profile</span>
+              </Link>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Only show on mobile screens (md:hidden) */}
+              <div className="md:hidden">
+                <InstallButton />
               </div>
-              <span className="font-medium">Profile</span>
-            </Link>
-          </div>
+            </div>
+          </nav>
         </div>
       </div>
 
@@ -163,8 +172,8 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${pathname === item.href
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                 >
                   {item.icon}
@@ -198,8 +207,8 @@ export default function Navbar() {
               <Link
                 href="/profile"
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${pathname === '/profile'
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-foreground hover:bg-muted'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-foreground hover:bg-muted'
                   }`}
               >
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
