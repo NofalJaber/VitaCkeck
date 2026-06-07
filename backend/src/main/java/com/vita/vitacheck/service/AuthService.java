@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -81,8 +82,13 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("If this email exists, a reset link has been sent.")); 
                 
-        // Delete any existing unused tokens for this user
-        tokenRepository.deleteByUser_Id(user.getId());
+        Optional<PasswordResetToken> existingToken = tokenRepository.findByUser(user);
+
+        if(existingToken.isPresent()) {
+            tokenRepository.delete(existingToken.get());
+            tokenRepository.flush();
+        }
+
 
         // Generate a secure random token
         String token = UUID.randomUUID().toString();
