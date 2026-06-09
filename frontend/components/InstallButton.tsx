@@ -31,23 +31,18 @@ export default function InstallButton() {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    // Show the native Android install prompt
     deferredPrompt.prompt();
 
-    // Wait for the user to accept or dismiss the prompt
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
-      // Clear the prompt so the button disappears after successful installation
       setDeferredPrompt(null);
     } else {
       console.log('User dismissed the install prompt');
     }
   };
 
-  // Only render the button if the app is NOT installed AND the browser gave us the install prompt
-  // (This automatically hides the button on iOS for now, since iOS doesnt fire this event)
   if (isInstalled || !deferredPrompt) {
     return null;
   }

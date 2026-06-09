@@ -12,7 +12,6 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
-  // Rulează doar în browser la încărcarea paginii pentru a seta tema corectă
   useEffect(() => {
     setMounted(true);
     if (document.documentElement.classList.contains('dark')) {
@@ -110,31 +109,35 @@ export default function Navbar() {
           </nav>
 
           {/* Menu Footer */}
-          <nav className="w-full flex items-center justify-between p-4 bg-transparent">
-            <div className="p-4 border-t border-border">
-              <Link
-                href="/profile"
-                onClick={() => setIsMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === '/profile'
+          <div className="border-t border-border p-4 flex items-center justify-between gap-2 bg-transparent">
+            {/* Profile Link Mobile */}
+            <Link
+              href="/profile"
+              onClick={() => setIsMenuOpen(false)}
+              className={`flex-1 flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${pathname === '/profile'
                   ? 'bg-primary text-primary-foreground'
                   : 'text-foreground hover:bg-muted'
-                  }`}
-              >
-                <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-                <span className="font-medium">Profile</span>
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              {/* Only show on mobile screens (md:hidden) */}
-              <div className="md:hidden">
-                <InstallButton />
+                }`}
+            >
+              <div className={`w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center ${pathname === '/profile' ? 'bg-primary-foreground/20' : 'bg-primary/20'
+                }`}>
+                <svg
+                  className={`w-4 h-4 ${pathname === '/profile' ? 'text-primary-foreground' : 'text-primary'}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
               </div>
+              <span className="font-medium truncate">Profile</span>
+            </Link>
+
+            {/* Install Button Mobile */}
+            <div className="md:hidden flex-shrink-0">
+              <InstallButton />
             </div>
-          </nav>
+          </div>
         </div>
       </div>
 
@@ -191,12 +194,10 @@ export default function Navbar() {
                   aria-label="Toggle Dark Mode"
                 >
                   {isDarkMode ? (
-                    // Sun Icon pt. a trece în Light Mode
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   ) : (
-                    // Moon Icon pt. a trece în Dark Mode
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
@@ -204,19 +205,23 @@ export default function Navbar() {
                 </button>
               )}
 
+              {/* Profile Link Desktop */}
               <Link
                 href="/profile"
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${pathname === '/profile'
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-foreground hover:bg-muted'
-                  }`}
+                className="flex items-center gap-2 group"
               >
-                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground shrink-0">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
-                <span className="hidden sm:block text-sm font-medium">Profile</span>
+                <span className={`hidden sm:block text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${pathname === '/profile'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground group-hover:text-foreground group-hover:bg-muted'
+                  }`}
+                >
+                  Profile
+                </span>
               </Link>
             </div>
           </div>
