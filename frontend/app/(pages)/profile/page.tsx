@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi, userApi } from '@/lib/axios';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface UserProfile {
   email: string;
@@ -24,6 +25,8 @@ export default function Profile() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const { language, t } = useLanguage();
 
   const fetchUserData = async () => {
     try {
@@ -77,11 +80,11 @@ export default function Profile() {
       };
 
       await userApi.put('/profile', payload);
-      setSuccess('Profile updated successfully!');
+      setSuccess(t.profileUpdateSuccess);
       setIsEditing(false);
       fetchUserData();
     } catch (err: any) {
-      const msg = err.response?.data || 'Failed to update profile.';
+      const msg = err.response?.data || t.profileUpdateError;
       setError(msg);
     } finally {
       setSaving(false);
@@ -106,8 +109,8 @@ export default function Profile() {
     <div className="max-w-4xl mx-auto p-4 md:p-6">
       {/* Header */}
       <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Profile Settings</h1>
-        <p className="text-muted-foreground mt-1 text-sm md:text-base">Manage your personal information</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t.profileSettings}</h1>
+        <p className="text-muted-foreground mt-1 text-sm md:text-base">{t.profileSettingsText}</p>
       </div>
 
       {/* Profile Card */}
@@ -138,7 +141,7 @@ export default function Profile() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
-                Edit Profile
+                {t.editProfile}
               </button>
             )}
           </div>
@@ -170,17 +173,17 @@ export default function Profile() {
             // View Mode
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
-                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Full Name</label>
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">{t.fullName}</label>
                 <p className="text-foreground font-medium text-sm md:text-base">{user.firstName} {user.lastName}</p>
               </div>
 
               <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
-                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Email Address</label>
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">{t.email}</label>
                 <p className="text-foreground font-medium text-sm md:text-base break-all">{user.email}</p>
               </div>
 
               <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0">
-                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Phone Number</label>
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">{t.phoneNumber}</label>
                 <p className="text-foreground font-medium text-sm md:text-base">{user.phoneNumber}</p>
               </div>
 
@@ -190,14 +193,14 @@ export default function Profile() {
               </div>
 
               <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0 sm:col-span-2 md:col-span-1">
-                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Demographics</label>
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">{t.demographics}</label>
                 <p className="text-foreground font-medium text-sm md:text-base">
-                  {user.age} years old - {user.male ? 'Male' : 'Female'}
+                  {user.age} {t.yearsOld} - {user.male ? t.male : t.female}
                 </p>
               </div>
 
               <div className="space-y-1 bg-muted/30 p-3 rounded-lg sm:bg-transparent sm:p-0 sm:col-span-2">
-                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">Address</label>
+                <label className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider sm:normal-case sm:tracking-normal">{t.address}</label>
                 <p className="text-foreground font-medium text-sm md:text-base">{user.address || 'Not provided'}</p>
               </div>
             </div>
@@ -206,7 +209,7 @@ export default function Profile() {
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 <div className="sm:col-span-2 md:col-span-1">
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Email (cannot be changed)</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.emailCannotChange}</label>
                   <input
                     type="text"
                     value={user?.email || ''}
@@ -218,7 +221,7 @@ export default function Profile() {
                 <div className="hidden md:block" />
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">First Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.firstName}</label>
                   <input
                     name="firstName"
                     value={formData.firstName || ''}
@@ -229,7 +232,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Last Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.lastName}</label>
                   <input
                     name="lastName"
                     value={formData.lastName || ''}
@@ -240,7 +243,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Phone Number</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.phoneNumber}</label>
                   <input
                     name="phoneNumber"
                     value={formData.phoneNumber || ''}
@@ -262,7 +265,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Age</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.age}</label>
                   <input
                     name="age"
                     type="number"
@@ -274,20 +277,20 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Gender</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.gender}</label>
                   <select
                     name="male"
                     value={formData.male ? 'true' : 'false'}
                     onChange={handleGenderChange}
                     className="w-full rounded-lg border border-border bg-card px-3 py-2 md:px-4 md:py-3 text-sm md:text-base text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
                   >
-                    <option value="true">Male</option>
-                    <option value="false">Female</option>
+                    <option value="true">{t.male}</option>
+                    <option value="false">{t.female}</option>
                   </select>
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">Address</label>
+                  <label className="block text-sm font-medium text-foreground mb-1 md:mb-2">{t.address}</label>
                   <textarea
                     name="address"
                     value={formData.address || ''}
@@ -308,7 +311,7 @@ export default function Profile() {
                   }}
                   className="w-full sm:w-auto px-4 py-2 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-muted transition-colors text-center"
                 >
-                  Cancel
+                  {t.cancel}
                 </button>
                 <button
                   type="submit"
@@ -321,9 +324,9 @@ export default function Profile() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      Saving...
+                      {t.saving}
                     </>
-                  ) : 'Save Changes'}
+                  ) : t.saveChanges}
                 </button>
               </div>
             </form>
@@ -334,8 +337,8 @@ export default function Profile() {
       {/* Danger Zone */}
       {!isEditing && (
         <div className="mt-6 md:mt-8 bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm">
-          <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 md:mb-2">Account Actions</h3>
-          <p className="text-muted-foreground text-xs md:text-sm mb-4">Sign out from your account on this device.</p>
+          <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 md:mb-2">{t.accountActions}</h3>
+          <p className="text-muted-foreground text-xs md:text-sm mb-4">{t.signOutText}</p>
           <button
             onClick={handleLogout}
             className="w-full sm:w-auto px-4 py-2 rounded-lg bg-destructive text-destructive-foreground font-medium hover:bg-destructive/90 transition-colors flex items-center justify-center gap-2"
@@ -343,7 +346,7 @@ export default function Profile() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            Sign Out
+            {t.signOut}
           </button>
         </div>
       )}

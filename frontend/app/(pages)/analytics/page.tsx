@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { testsApi } from "@/lib/axios";
+import { useLanguage } from '@/context/LanguageContext';
 import {
   LineChart,
   Line,
@@ -36,6 +37,8 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const { language, t } = useLanguage();
+
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
@@ -60,7 +63,7 @@ export default function AnalyticsPage() {
           <p className="font-semibold text-foreground">
             {payload[0].value} {payload[0].payload.um}
           </p>
-          <p className="text-xs text-primary mt-1">Click point to view document</p>
+          <p className="text-xs text-primary mt-1">{t.clickToView}</p>
         </div>
       );
     }
@@ -80,8 +83,8 @@ export default function AnalyticsPage() {
     <div className="max-w-7xl mx-auto p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Medical Analytics</h1>
-        <p className="text-muted-foreground mt-1">Track the evolution of your medical tests over time</p>
+        <h1 className="text-3xl font-bold text-foreground">{t.medicalAnalytics}</h1>
+        <p className="text-muted-foreground mt-1">{t.medicalAnalyticsText}</p>
       </div>
 
       {/* Loading State */}
@@ -164,11 +167,11 @@ export default function AnalyticsPage() {
                     <div>
                       <h2 className="font-semibold text-foreground">{item.test_name}</h2>
                       <p className="text-sm text-muted-foreground mt-0.5">
-                        Unit: {item.um || "N/A"}
+                        {t.unit}: {item.um || "N/A"}
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Reference Range</div>
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">{t.referenceRange}</div>
                       <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-sm font-medium ${inRange ? 'bg-success/10 text-success' : 'bg-accent/10 text-accent'}`}>
                         {item.min_reference !== null ? item.min_reference : "Min"} - {item.max_reference !== null ? item.max_reference : "Max"}
                       </div>
@@ -245,14 +248,14 @@ export default function AnalyticsPage() {
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-primary" />
-                        <span className="text-muted-foreground">Your values</span>
+                        <span className="text-muted-foreground">{t.values}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-sm bg-success/30" />
-                        <span className="text-muted-foreground">Normal range</span>
+                        <span className="text-muted-foreground">{t.normalRange}</span>
                       </div>
                     </div>
-                    <span className="text-muted-foreground">{item.measurements.length} measurements</span>
+                    <span className="text-muted-foreground">{item.measurements.length} {t.measurements}</span>
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { testsApi } from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MedicalTest {
   id: number;
@@ -19,6 +20,8 @@ export default function TestsPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { language, t } = useLanguage();
 
   const fetchTests = async () => {
     try {
@@ -54,12 +57,12 @@ export default function TestsPage() {
 
     try {
       await testsApi.post("/upload", formData);
-      setMessage("Test uploaded successfully!");
+      setMessage(t.uploadSuccess);
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       fetchTests();
     } catch (error: any) {
-      setMessage(error.response?.data || "An error occurred during upload.");
+      setMessage(error.response?.data || t.uploadError);
     } finally {
       setLoading(false);
     }
@@ -89,7 +92,7 @@ export default function TestsPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this test?")) return;
+    if (!window.confirm(t.testDeleteConfirm)) return;
 
     setLoading(true);
     setMessage("");
@@ -97,10 +100,10 @@ export default function TestsPage() {
     try {
       await testsApi.delete(`/${id}/delete`);
       setTests(tests.filter((test) => test.id !== id));
-      setMessage("Test deleted successfully.");
+      setMessage(t.testDeleteSuccess);
     } catch (error) {
       console.error(`Failed to delete file`, error);
-      setMessage("Failed to delete the test.");
+      setMessage(t.testDeleteFail);
     } finally {
       setLoading(false);
     }
@@ -110,8 +113,8 @@ export default function TestsPage() {
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">My Medical Tests</h1>
-        <p className="text-muted-foreground mt-1">Upload, view, and manage your medical test records</p>
+        <h1 className="text-3xl font-bold text-foreground">{t.myMedicalTests}</h1>
+        <p className="text-muted-foreground mt-1">{t.myMedicalTestsText}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -125,8 +128,8 @@ export default function TestsPage() {
                 </svg>
               </div>
               <div>
-                <h2 className="font-semibold text-foreground">Upload New Test</h2>
-                <p className="text-sm text-muted-foreground">PDF files only</p>
+                <h2 className="font-semibold text-foreground">{t.uploadNewTest}</h2>
+                <p className="text-sm text-muted-foreground">{t.pdfFilesOnly}</p>
               </div>
             </div>
 
@@ -150,7 +153,7 @@ export default function TestsPage() {
                       </svg>
                     </div>
                     <p className="font-medium text-foreground truncate">{file.name}</p>
-                    <p className="text-sm text-muted-foreground mt-1">Click to change file</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t.clickToChangeFile}</p>
                   </div>
                 ) : (
                   <div>
@@ -159,8 +162,8 @@ export default function TestsPage() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                     </div>
-                    <p className="font-medium text-foreground">Click to select file</p>
-                    <p className="text-sm text-muted-foreground mt-1">or drag and drop</p>
+                    <p className="font-medium text-foreground">{t.clickToSelectFile}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{t.orDragAndDrop}</p>
                   </div>
                 )}
               </div>
@@ -180,14 +183,14 @@ export default function TestsPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    Uploading...
+                    {t.uploading}
                   </>
                 ) : (
                   <>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                     </svg>
-                    Upload PDF
+                    {t.uploadPdf}
                   </>
                 )}
               </button>
@@ -195,7 +198,7 @@ export default function TestsPage() {
 
             {message && (
               <div className={`mt-4 p-3 rounded-lg text-sm ${
-                message.includes("success")
+                message.includes("success") || message.includes("succes")
                   ? "bg-success/10 text-success border border-success/20"
                   : "bg-destructive/10 text-destructive border border-destructive/20"
               }`}>
@@ -209,8 +212,8 @@ export default function TestsPage() {
         <div className="lg:col-span-2">
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <div className="p-4 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-foreground">Your Records</h2>
-              <span className="text-sm text-muted-foreground">{tests.length} test{tests.length !== 1 ? 's' : ''}</span>
+              <h2 className="font-semibold text-foreground">{t.yourRecords}</h2>
+              <span className="text-sm text-muted-foreground">{tests.length} test{tests.length !== 1 ? t.tests : ''}</span>
             </div>
 
             {fetching ? (
@@ -219,7 +222,7 @@ export default function TestsPage() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
-                <p className="text-muted-foreground">Loading your tests...</p>
+                <p className="text-muted-foreground">{t.loadingTests}</p>
               </div>
             ) : tests.length === 0 ? (
               <div className="p-12 text-center">
@@ -228,8 +231,8 @@ export default function TestsPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">No tests uploaded yet</h3>
-                <p className="text-muted-foreground text-sm">Upload your first medical test to get started</p>
+                <h3 className="font-semibold text-foreground mb-2">{t.noTestsUploaded}</h3>
+                <p className="text-muted-foreground text-sm">{t.uploadFirstTest}</p>
               </div>
             ) : (
               <ul className="divide-y divide-border">
@@ -244,7 +247,7 @@ export default function TestsPage() {
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-foreground truncate">{test.fileName}</p>
                         <p className="text-sm text-muted-foreground">
-                          Uploaded on {new Date(test.uploadDate).toLocaleDateString('en-US', { 
+                          {t.uploadedOn} {new Date(test.uploadDate).toLocaleDateString('en-US', { 
                             year: 'numeric', 
                             month: 'short', 
                             day: 'numeric' 
@@ -255,7 +258,7 @@ export default function TestsPage() {
                         <button
                           onClick={() => handleView(test.id, test.fileName)}
                           className="p-2 rounded-lg text-primary bg-primary/10 hover:bg-primary/20"
-                          title="View"
+                          title={t.view}
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -265,7 +268,7 @@ export default function TestsPage() {
                         <button
                           onClick={() => handleDownload(test.id, test.fileName, test.fileType)}
                           className="p-2 rounded-lg text-muted-foreground bg-muted hover:bg-primary/20"
-                          title="Download"
+                          title={t.download}
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -274,7 +277,7 @@ export default function TestsPage() {
                         <button
                           onClick={() => handleDelete(test.id)}
                           className="p-2 rounded-lg text-destructive bg-destructive/10 hover:bg-destructive/20"
-                          title="Delete"
+                          title={t.delete}
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

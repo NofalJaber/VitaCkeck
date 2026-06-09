@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { testsApi, userApi } from '@/lib/axios';
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 import {
   LineChart,
   Line,
@@ -53,6 +54,8 @@ export default function HomePage() {
   const [uploadMessage, setUploadMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { language, t } = useLanguage();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,12 +88,12 @@ export default function HomePage() {
 
     try {
       await testsApi.post('/upload', formData);
-      setUploadMessage('Test uploaded successfully!');
+      setUploadMessage(t.uploadSuccess);
       const testsRes = await testsApi.get('');
       setRecentTests(testsRes.data.slice(0, 5));
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error: any) {
-      setUploadMessage(error.response?.data || 'Upload failed');
+      setUploadMessage(error.response?.data || t.uploadFail);
     } finally {
       setUploading(false);
     }
@@ -126,7 +129,7 @@ export default function HomePage() {
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
           </svg>
-          <p className="text-muted-foreground">Loading your dashboard...</p>
+          <p className="text-muted-foreground">{t.loadingDashboard}</p>
         </div>
       </div>
     );
@@ -137,10 +140,10 @@ export default function HomePage() {
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground">
-          Welcome back{user ? `, ${user.firstName}` : ''}
+          {t.welcomeBack}{user ? `, ${user.firstName}` : ''}
         </h1>
         <p className="text-muted-foreground mt-1">
-          {"Here's an overview of your health data"}
+          {t.overviewText}
         </p>
       </div>
 
@@ -155,8 +158,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground">Upload Test</h3>
-              <p className="text-sm text-muted-foreground">Add a new medical test</p>
+              <h3 className="font-semibold text-foreground">{t.uploadTest}</h3>
+              <p className="text-sm text-muted-foreground">{t.uploadTestText}</p>
             </div>
           </div>
           <label className="mt-4 block">
@@ -168,11 +171,11 @@ export default function HomePage() {
               className="hidden"
             />
             <span className={`block w-full text-center py-2.5 px-4 rounded-lg border-2 border-dashed border-border bg-muted/50 text-sm font-medium cursor-pointer hover:border-primary hover:bg-primary/5 ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-              {uploading ? 'Uploading...' : 'Choose PDF file'}
+              {uploading ? t.uploading : t.chooseFile}
             </span>
           </label>
           {uploadMessage && (
-            <p className={`mt-2 text-sm ${uploadMessage.includes('success') ? 'text-success' : 'text-destructive'}`}>
+            <p className={`mt-2 text-sm ${uploadMessage.includes('success') || uploadMessage.includes('succes') ? 'text-success' : 'text-destructive'}`}>
               {uploadMessage}
             </p>
           )}
@@ -187,8 +190,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground group-hover:text-primary">My Tests</h3>
-              <p className="text-sm text-muted-foreground">View all uploaded tests</p>
+              <h3 className="font-semibold text-foreground group-hover:text-primary">{t.myTests}</h3>
+              <p className="text-sm text-muted-foreground">{t.viewAllTests}</p>
             </div>
             <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -205,8 +208,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-foreground group-hover:text-primary">Analytics</h3>
-              <p className="text-sm text-muted-foreground">View detailed graphs</p>
+              <h3 className="font-semibold text-foreground group-hover:text-primary">{t.analytics}</h3>
+              <p className="text-sm text-muted-foreground">{t.viewDetailedGraphs}</p>
             </div>
             <svg className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -219,7 +222,7 @@ export default function HomePage() {
       {analytics.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-foreground">Health Trends</h2>
+            <h2 className="text-xl font-semibold text-foreground">{t.healthTrends}</h2>
             <Link href="/analytics" className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
               View all
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,9 +309,9 @@ export default function HomePage() {
       {/* Recent Tests */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-foreground">Recent Tests</h2>
+          <h2 className="text-xl font-semibold text-foreground">{t.recentTests}</h2>
           <Link href="/tests" className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1">
-            View all
+            {t.viewAll}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -356,7 +359,7 @@ export default function HomePage() {
                       onClick={() => router.push(`/tests/${test.id}?name=${encodeURIComponent(test.fileName)}`)}
                       className="text-sm px-3 py-1.5 rounded-lg text-primary bg-primary/10 hover:bg-primary/20 font-medium transition-colors"
                     >
-                      View
+                      {t.view}
                     </button>
                   </div>
                 </li>
